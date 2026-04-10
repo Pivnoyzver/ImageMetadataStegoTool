@@ -13,10 +13,10 @@ namespace metadata.Tests
         public void Serialize_GeneralCase_ShouldReturnByteArray()
         {
             // Arrange
-            var payloadType = PayloadType.Text;
+            var payloadType = DataType.Text;
             var payloadString = "HelloWorld";
             var payloadBytes = Encoding.UTF8.GetBytes(payloadString);
-            var binaryData = new BinaryData(payloadType, payloadBytes);
+            var binaryData = new Package(payloadType, payloadBytes);
 
             // Act
             var result = binaryData.Serialize();
@@ -35,9 +35,9 @@ namespace metadata.Tests
         public void Serialize_HeaderVerification_ShouldFormCorrectSections()
         {
             // Arrange
-            var payloadType = PayloadType.Json;
+            var payloadType = DataType.File;
             var payloadBytes = new byte[] { 0x01, 0x02, 0x03 };
-            var binaryData = new BinaryData(payloadType, payloadBytes);
+            var binaryData = new Package(payloadType, payloadBytes);
             
             // Act
             var result = binaryData.Serialize();
@@ -67,7 +67,7 @@ namespace metadata.Tests
         public void Deserialize_SimpleCase_ShouldPopulateClassVariables()
         {
             // Arrange
-            var payloadType = PayloadType.Binary;
+            var payloadType = DataType.File;
             var payloadBytes = new byte[] { 0xAA, 0xBB, 0xCC, 0xDD };
             
             var serializedData = new byte[12 + payloadBytes.Length];
@@ -77,8 +77,7 @@ namespace metadata.Tests
             payloadBytes.CopyTo(serializedData, 12);
 
             // Act
-            var binaryData = new BinaryData(PayloadType.Text, []);
-            binaryData.Deserialize(serializedData);
+            var binaryData = Package.Deserialize(serializedData);
             
             // Assert
             Assert.That(binaryData.DataType, Is.EqualTo(payloadType));
@@ -89,7 +88,7 @@ namespace metadata.Tests
         public void Deserialize_WithOffset_ShouldFindMagicAndPopulate()
         {
             // Arrange
-            var payloadType = PayloadType.File;
+            var payloadType = DataType.File;
             var payloadBytes = new byte[] { 0xFF };
             
             var properSerializedData = new byte[12 + payloadBytes.Length];
@@ -103,8 +102,7 @@ namespace metadata.Tests
             var dataWithOffset = garbage.Concat(properSerializedData).ToArray();
 
             // Act
-            var binaryData = new BinaryData(PayloadType.Text, []);
-            binaryData.Deserialize(dataWithOffset);
+            var binaryData = Package.Deserialize(dataWithOffset);
             
             // Assert
             Assert.That(binaryData.DataType, Is.EqualTo(payloadType));
@@ -115,15 +113,14 @@ namespace metadata.Tests
         public void FullCycle_SerializeAndDeserialize_ShouldMaintainDataIntegrity()
         {
             // Arrange
-            var initialPayloadType = PayloadType.Text;
+            var initialPayloadType = DataType.Text;
             var originalBytes = Encoding.UTF8.GetBytes("Testing full cycle completeness here");
             
-            var sourceData = new BinaryData(initialPayloadType, originalBytes);
+            var sourceData = new Package(initialPayloadType, originalBytes);
             
             // Act
             var serialized = sourceData.Serialize();
-            var restoredData = new BinaryData(PayloadType.Binary, []);
-            restoredData.Deserialize(serialized);
+            var restoredData = Package.Deserialize(serialized);
             
             // Assert
             Assert.That(restoredData.DataType, Is.EqualTo(initialPayloadType));

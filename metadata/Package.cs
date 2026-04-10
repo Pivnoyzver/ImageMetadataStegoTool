@@ -6,22 +6,21 @@ using System.Text;
 
 namespace metadata;
 
-public enum PayloadType
+public enum DataType
 {
     Text,
-    Binary,
-    Json,
     File
 }
 
-public class BinaryData
+public class Package
 {
     private static readonly byte[] Magic = Encoding.ASCII.GetBytes("stEG");
     public int Length => Data.Length;
-    public PayloadType DataType { get; private set; }
+    public DataType DataType { get; private set; }
+    public string FileExtension { get; private set; } //TODO
     public byte[] Data { get; private set; }
 
-    public BinaryData(PayloadType dataType, byte[] data)
+    public Package(DataType dataType, byte[] data)
     {
         DataType = dataType;
         Data = (byte[])data.Clone();
@@ -40,9 +39,9 @@ public class BinaryData
         return result;
     }
 
-    public void Deserialize(byte[] data)
+    public static Package Deserialize(byte[] package)
     {
-        ReadOnlySpan<byte> span = data.AsSpan();
+        ReadOnlySpan<byte> span = package.AsSpan();
 
         var startIndex = span.IndexOf(Magic);
         if (startIndex == -1) throw new ArgumentException("Magic not found");
@@ -50,9 +49,9 @@ public class BinaryData
         var length = BitConverter.ToInt32(span.Slice(startIndex + 4, 4));
         if (length < 0) throw new ArgumentException("Invalid payload length");
 
-        var dataType = (PayloadType)BitConverter.ToInt32(span.Slice(startIndex + 8, 4));
+        var dataType = (DataType)BitConverter.ToInt32(span.Slice(startIndex + 8, 4));
+        var data = span.Slice(startIndex + 12, length).ToArray();
 
-        this.DataType = dataType;
-        this.Data = span.Slice(startIndex + 12, length).ToArray();
+        return new Package(dataType, data);
     }
 }
