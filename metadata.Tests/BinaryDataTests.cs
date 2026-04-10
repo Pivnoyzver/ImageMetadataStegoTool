@@ -75,10 +75,9 @@ namespace metadata.Tests
             BitConverter.GetBytes(payloadBytes.Length).CopyTo(serializedData, 4);
             BitConverter.GetBytes((int)payloadType).CopyTo(serializedData, 8);
             payloadBytes.CopyTo(serializedData, 12);
-            
-            var binaryData = new BinaryData(PayloadType.Text, new byte[] { });
-            
+
             // Act
+            var binaryData = new BinaryData(PayloadType.Text, []);
             binaryData.Deserialize(serializedData);
             
             // Assert
@@ -102,10 +101,9 @@ namespace metadata.Tests
             // Prefix some garbage data
             var garbage = new byte[] { 0x01, 0x02, 0x03, 0x04 };
             var dataWithOffset = garbage.Concat(properSerializedData).ToArray();
-            
-            var binaryData = new BinaryData(PayloadType.Text, new byte[0]);
-            
+
             // Act
+            var binaryData = new BinaryData(PayloadType.Text, []);
             binaryData.Deserialize(dataWithOffset);
             
             // Assert
@@ -124,9 +122,8 @@ namespace metadata.Tests
             
             // Act
             var serialized = sourceData.Serialize();
-            var restoredData = new BinaryData(PayloadType.Binary, new byte[0]); // Initial empty state
+            var restoredData = new BinaryData(PayloadType.Binary, []);
             restoredData.Deserialize(serialized);
-            var reSerialized = restoredData.Serialize();
             
             // Assert
             Assert.That(restoredData.DataType, Is.EqualTo(initialPayloadType));
