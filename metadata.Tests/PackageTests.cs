@@ -7,7 +7,7 @@ using System.Linq;
 namespace metadata.Tests
 {
     [TestFixture]
-    public class BinaryDataTests
+    public class PackageTests
     {
         [Test]
         public void Serialize_GeneralCase_ShouldReturnByteArray()
