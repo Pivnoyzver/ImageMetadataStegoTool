@@ -110,7 +110,7 @@ public class JpegImage : Image
     private void ValidateJpeg()
     {
         if (imageBytes.Length < 2)
-            throw new ArgumentException("Image too short");
+            throw new ArgumentException("Invalid Jpeg file");
 
         if (imageBytes[0] != 0xFF || imageBytes[1] != 0xD8)
             throw new ArgumentException("Invalid JPEG: missing SOI marker");

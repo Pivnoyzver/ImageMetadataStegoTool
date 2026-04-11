@@ -18,5 +18,5 @@ public abstract class Image : IImage
 
     public abstract byte[] Read();
     
-    private static void ValidateImage(byte[] bytes) => ArgumentNullException.ThrowIfNull(bytes);
+    protected static void ValidateImage(byte[] bytes) => ArgumentNullException.ThrowIfNull(bytes);
 }
