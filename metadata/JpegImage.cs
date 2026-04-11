@@ -71,16 +71,16 @@ public class JpegImage : IImage
     {
         var packageBase64 = Convert.ToBase64String(package);
 
-         var xml =
-            $"""
-            <x:xmpmeta xmlns:x="adobe:ns:meta/">
-                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-                    <rdf:Description xmlns:steg="http://example.com/steg/">
-                        <steg:Data>{packageBase64}</steg:Data>
-                    </rdf:Description>
-                </rdf:RDF>
-            </x:xmpmeta>
-            """;
+        var xml =
+        $"""
+        <x:xmpmeta xmlns:x="adobe:ns:meta/">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <rdf:Description xmlns:steg="http://example.com/steg/">
+                    <steg:Data>{packageBase64}</steg:Data>
+                </rdf:Description>
+            </rdf:RDF>
+        </x:xmpmeta>
+        """;
 
         var xmlBytes = Encoding.UTF8.GetBytes(xml); 
         var xmpHeader = Encoding.ASCII.GetBytes(@"http://ns.adobe.com/xap/1.0/\0");
