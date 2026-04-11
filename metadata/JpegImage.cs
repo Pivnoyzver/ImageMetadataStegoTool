@@ -5,15 +5,11 @@ using System.Text;
 
 namespace metadata;
 
-public class JpegImage : IImage
+public class JpegImage : Image, IImage
 {
-
-    private  byte[] imageBytes;
-
-    public JpegImage(byte[] originalImage)
+    public JpegImage(byte[] originalImage) : base(originalImage)
     {
-        ValidateJpeg(originalImage);
-        imageBytes = (byte[])originalImage.Clone();
+        ValidateJpeg();
     }
     public byte[] Read()
     {
@@ -111,21 +107,13 @@ public class JpegImage : IImage
         imageBytes = result.ToArray();
     }
 
-    public byte[] GetBytes()
+    private void ValidateJpeg()
     {
-        return (byte[])imageBytes.Clone();
-    }
-
-    private static void ValidateJpeg(byte[] bytes)
-    {
-        if (bytes == null) 
-            throw new ArgumentNullException(nameof(bytes));
-
-        if (bytes.Length < 2) 
+        if (imageBytes.Length < 2)
             throw new ArgumentException("Image too short");
-            
-        if (bytes[0] != 0xFF || bytes[1] != 0xD8) 
-            throw new ArgumentException("Invalid Jpeg: missing SOI marker");
+
+        if (imageBytes[0] != 0xFF || imageBytes[1] != 0xD8)
+            throw new ArgumentException("Invalid JPEG: missing SOI marker");
     }
 
     private static bool StartWith(byte[] source, int startIndex, byte[] prefix)
