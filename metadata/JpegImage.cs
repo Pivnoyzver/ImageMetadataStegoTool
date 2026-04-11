@@ -5,13 +5,13 @@ using System.Text;
 
 namespace metadata;
 
-public class JpegImage : Image, IImage
+public class JpegImage : Image
 {
     public JpegImage(byte[] originalImage) : base(originalImage)
     {
         ValidateJpeg();
     }
-    public byte[] Read()
+    public override byte[] Read()
     {
         var xmpHeader = Encoding.ASCII.GetBytes(@"http://ns.adobe.com/xap/1.0/\0");
         var index = 2;
@@ -63,7 +63,7 @@ public class JpegImage : Image, IImage
         throw new ArgumentException("XMP metadata not found");
     }
 
-    public void Write(byte[] package)
+    public override void Write(byte[] package)
     {
         var packageBase64 = Convert.ToBase64String(package);
 

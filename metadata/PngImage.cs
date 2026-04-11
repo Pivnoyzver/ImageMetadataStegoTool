@@ -1,14 +1,26 @@
+using System;
+
 namespace metadata;
 
-public class PngImage : IImage
+public class PngImage : Image
 {
-    public byte[] Read()
+    public PngImage(byte[] originalImage) : base(originalImage)
     {
-        throw new System.NotImplementedException();
+        ValidatePng();
     }
 
-    public void Write(byte[] package)
+    private void ValidatePng()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
+    }
+
+    public override void Write(byte[] data)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override byte[] Read()
+    {
+        throw new NotImplementedException();
     }
 }

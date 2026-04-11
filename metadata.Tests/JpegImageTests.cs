@@ -74,7 +74,7 @@ public class JpegImageTests
         var package = Encoding.UTF8.GetBytes("secret");
 
         jpegImage.Write(package);
-        var resultBytes = jpegImage.ImageBytes;
+        var resultBytes = jpegImage.GetBytes;
 
         Assert.That(originalImage.SequenceEqual(resultBytes), Is.False);
     }
@@ -96,7 +96,7 @@ public class JpegImageTests
         var package = Encoding.UTF8.GetBytes("test");
 
         jpegImage.Write(package);
-        var resultBytes = jpegImage.ImageBytes;
+        var resultBytes = jpegImage.GetBytes;
 
         Assert.That(resultBytes, Has.Length.GreaterThan(originalImage.Length));
     }
