@@ -57,7 +57,7 @@ public class JpegImage : IImage
                 if (contentEnd == -1)
                     throw new ArgumentException("Closing data tag not found");
 
-                var base64 = xml.Substring(contentStart, contentEnd);
+                var base64 = xml.Substring(contentStart, contentEnd - contentStart);
                 return Convert.FromBase64String(base64);
             }
 
@@ -119,7 +119,7 @@ public class JpegImage : IImage
     private static void ValidateJpeg(byte[] bytes)
     {
         if (bytes == null) 
-            throw new ArgumentException(nameof(bytes));
+            throw new ArgumentNullException(nameof(bytes));
 
         if (bytes.Length < 2) 
             throw new ArgumentException("Image too short");
