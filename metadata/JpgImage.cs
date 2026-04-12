@@ -7,24 +7,22 @@ namespace metadata;
 
 public class JpgImage : IImage
 {
-    public string FilePath { get; private set; }
+    private readonly byte[] imageBytes;
 
-    public JpgImage(string filePath)
+    public JpgImage(byte[] originalImage)
     {
-        FilePath = filePath;
-        
-        Span<byte> header = stackalloc byte[2];
-        using var fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read);
-        if (fs.Read(header) < 2)
+        if (originalImage == null)
+            throw new ArgumentNullException(nameof(originalImage));
+        if (originalImage.Length < 2)
             throw new ArgumentException("Image too short");
-            
-        if (header[0] != 0xFF || header[1] != 0xD8)
-            throw new ArgumentException("Invalid Jpg: missing SOI marker");
+        if (originalImage[0] != 0xFF || originalImage[1] != 0xD8)
+            throw new ArgumentException("Invalid Jpeg: missing SOI marker");
+
+        imageBytes = (byte[])originalImage.Clone();
     }
 
     public byte[] Read()
     {
-        var imageBytes = File.ReadAllBytes(FilePath);
         var xmpHeader = "http://ns.adobe.com/xap/1.0/\0"u8.ToArray();
         var index = 2;
 
@@ -79,9 +77,8 @@ public class JpgImage : IImage
         throw new ArgumentException("XMP metadata not found");
     }
 
-    public IImage Write(byte[] package)
+    public byte[] Write(byte[] package)
     {
-        var imageBytes = File.ReadAllBytes(FilePath);
         var packageBase64 = Convert.ToBase64String(package);
 
         var xml =
@@ -116,15 +113,7 @@ public class JpgImage : IImage
         // Пишем оригинальное тело картинки, пропуская маркер SOI (первые 2 байта)
         ms.Write(imageBytes, 2, imageBytes.Length - 2);
 
-        var outputDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "OutputImages");
-        if (!Directory.Exists(outputDirectory))
-            Directory.CreateDirectory(outputDirectory);
-
-        var newFileName = $"{Path.GetFileNameWithoutExtension(FilePath)}_{Guid.NewGuid():N}{Path.GetExtension(FilePath)}";
-        var newFilePath = Path.Combine(outputDirectory, newFileName);
-
-        File.WriteAllBytes(newFilePath, ms.ToArray());
-        return new JpgImage(newFilePath);
+        return ms.ToArray();
     }
 
     private static bool StartWith(byte[] source, int startIndex, ReadOnlySpan<byte> prefix)

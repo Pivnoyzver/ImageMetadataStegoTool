@@ -16,27 +16,24 @@ public class PngImage : IImage
 
     private const string MetadataKeyword = "HiddenData";
 
-    public string FilePath { get; private set; }
+    private readonly byte[] imageBytes;
 
-    public PngImage(string filePath)
+    public PngImage(byte[] originalImage)
     {
-        FilePath = filePath;
-        
-        Span<byte> header = stackalloc byte[8];
-        using var fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read);
-        if (fs.Read(header) < 8)
-            throw new ArgumentException("Image too short");
-            
+        if (originalImage == null || originalImage.Length < PngSignature.Length)
+            throw new ArgumentException("Invalid PNG file");
+
+        imageBytes = (byte[])originalImage.Clone();
+
         for (var i = 0; i < PngSignature.Length; i++)
         {
-            if (header[i] != PngSignature[i])
+            if (imageBytes[i] != PngSignature[i])
                 throw new ArgumentException("Invalid PNG signature");
         }
     }
 
-    public IImage Write(byte[] package)
+    public byte[] Write(byte[] package)
     {
-        var imageBytes = File.ReadAllBytes(FilePath);
         var chunks = ReadChunks(imageBytes);
         
         chunks.RemoveAll(chunk => chunk.Type == "tEXt" && IsOurTextChunk(chunk.Data));
@@ -48,23 +45,11 @@ public class PngImage : IImage
             throw new InvalidOperationException("PNG does not contain IEND chunk");
 
         chunks.Insert(iendIndex, textChunk);
-        var newImageBytes = BuildPng(chunks);
-        
-        var outputDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "OutputImages");
-        if (!Directory.Exists(outputDirectory))
-            Directory.CreateDirectory(outputDirectory);
-
-        var newFileName = $"{Path.GetFileNameWithoutExtension(FilePath)}_{Guid.NewGuid():N}{Path.GetExtension(FilePath)}";
-        var newFilePath = Path.Combine(outputDirectory, newFileName);
-
-        File.WriteAllBytes(newFilePath, newImageBytes);
-
-        return new PngImage(newFilePath);
+        return BuildPng(chunks);
     }
 
     public byte[] Read()
     {
-        var imageBytes = File.ReadAllBytes(FilePath);
         var chunks = ReadChunks(imageBytes);
 
         var chunk = chunks.FirstOrDefault(c => c.Type == "tEXt" && IsOurTextChunk(c.Data));
