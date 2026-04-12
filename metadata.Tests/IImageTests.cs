@@ -1,6 +1,3 @@
-using System;
-using NUnit.Framework;
-
 namespace metadata.Tests
 {
     [TestFixture]
@@ -55,7 +52,7 @@ namespace metadata.Tests
             byte[] originalBytes = extension == "png" ? _pngBytes : _jpgBytes;
             IImage originalImage = GetImageInstance(extension, originalBytes);
             byte[] package = new byte[] { 0x10, 0x20, 0x30, 0x40, 0x50 };
-            
+
             byte[] newImageBytes = originalImage.Write(package);
             IImage newImage = GetImageInstance(extension, newImageBytes);
 
@@ -79,10 +76,10 @@ namespace metadata.Tests
             // Act
             byte[] intermediateImageBytes = originalImage.Write(package1);
             IImage intermediateImage = GetImageInstance(extension, intermediateImageBytes);
-            
+
             byte[] finalImageBytes = intermediateImage.Write(package2);
             IImage finalImage = GetImageInstance(extension, finalImageBytes);
-            
+
             byte[] readPackage = finalImage.Read();
 
             // Assert

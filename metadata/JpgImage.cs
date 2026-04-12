@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -28,20 +27,20 @@ public class JpgImage : IImage
 
         while (index < imageBytes.Length - 1)
         {
-            if (imageBytes[index] != 0xFF) 
+            if (imageBytes[index] != 0xFF)
                 throw new ArgumentException("Invalid Jpg segment marker");
 
             var marker = imageBytes[index + 1];
             index += 2;
 
-            if (marker == 0xD9 || marker == 0xDA) 
+            if (marker == 0xD9 || marker == 0xDA)
                 break;
 
-            if (index + 1 >= imageBytes.Length) 
+            if (index + 1 >= imageBytes.Length)
                 throw new ArgumentException("Invalid JPG segment length");
 
             var segmentLength = (imageBytes[index] << 8) | imageBytes[index + 1];
-            if (segmentLength < 2 || index + segmentLength > imageBytes.Length) 
+            if (segmentLength < 2 || index + segmentLength > imageBytes.Length)
                 throw new ArgumentException("Corrupted JPG segment");
 
             var dataStart = index + 2;
@@ -93,11 +92,11 @@ public class JpgImage : IImage
         """;
         var xmlBytes = Encoding.UTF8.GetBytes(xml);
         var xmpHeader = "http://ns.adobe.com/xap/1.0/\0"u8.ToArray();
-        
+
         var segmentLength = xmpHeader.Length + xmlBytes.Length + 2;
-        if (segmentLength > ushort.MaxValue) 
+        if (segmentLength > ushort.MaxValue)
             throw new ArgumentException("XMP packet is too large :(");
-        
+
         using var ms = new MemoryStream(imageBytes.Length + segmentLength + 4);
         ms.WriteByte(0xFF);
         ms.WriteByte(0xD8);

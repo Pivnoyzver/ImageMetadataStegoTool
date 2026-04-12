@@ -1,8 +1,4 @@
-using NUnit.Framework;
-using metadata;
-using System;
 using System.Text;
-using System.Linq;
 
 namespace metadata.Tests
 {

@@ -1,7 +1,6 @@
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -35,7 +34,7 @@ public class PngImage : IImage
     public byte[] Write(byte[] package)
     {
         var chunks = ReadChunks(imageBytes);
-        
+
         chunks.RemoveAll(chunk => chunk.Type == "tEXt" && IsOurTextChunk(chunk.Data));
 
         var textChunk = CreateTextChunk(package);
