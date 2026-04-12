@@ -2,6 +2,7 @@
 
 public interface IImage
 {
-    public void Write(byte[] package);
-    public byte[] Read();
+    string FilePath { get; }
+    IImage Write(byte[] package);
+    byte[] Read();
 }

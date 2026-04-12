@@ -1,12 +1,13 @@
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace metadata;
 
-public class PngImage : Image
+public class PngImage : IImage
 {
     private static readonly byte[] PngSignature =
     [
@@ -15,14 +16,29 @@ public class PngImage : Image
 
     private const string MetadataKeyword = "HiddenData";
 
-    public PngImage(byte[] originalImage) : base(originalImage)
+    public string FilePath { get; private set; }
+
+    public PngImage(string filePath)
     {
-        ValidatePng();
+        FilePath = filePath;
+        
+        Span<byte> header = stackalloc byte[8];
+        using var fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read);
+        if (fs.Read(header) < 8)
+            throw new ArgumentException("Image too short");
+            
+        for (var i = 0; i < PngSignature.Length; i++)
+        {
+            if (header[i] != PngSignature[i])
+                throw new ArgumentException("Invalid PNG signature");
+        }
     }
 
-    public override void Write(byte[] package)
+    public IImage Write(byte[] package)
     {
+        var imageBytes = File.ReadAllBytes(FilePath);
         var chunks = ReadChunks(imageBytes);
+        
         chunks.RemoveAll(chunk => chunk.Type == "tEXt" && IsOurTextChunk(chunk.Data));
 
         var textChunk = CreateTextChunk(package);
@@ -32,15 +48,26 @@ public class PngImage : Image
             throw new InvalidOperationException("PNG does not contain IEND chunk");
 
         chunks.Insert(iendIndex, textChunk);
-        imageBytes = BuildPng(chunks);
+        var newImageBytes = BuildPng(chunks);
+        
+        var outputDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "OutputImages");
+        if (!Directory.Exists(outputDirectory))
+            Directory.CreateDirectory(outputDirectory);
+
+        var newFileName = $"{Path.GetFileNameWithoutExtension(FilePath)}_{Guid.NewGuid():N}{Path.GetExtension(FilePath)}";
+        var newFilePath = Path.Combine(outputDirectory, newFileName);
+
+        File.WriteAllBytes(newFilePath, newImageBytes);
+
+        return new PngImage(newFilePath);
     }
 
-    public override byte[] Read()
+    public byte[] Read()
     {
+        var imageBytes = File.ReadAllBytes(FilePath);
         var chunks = ReadChunks(imageBytes);
 
-        var chunk = chunks.FirstOrDefault(chunk =>
-            chunk.Type == "tEXt" && IsOurTextChunk(chunk.Data));
+        var chunk = chunks.FirstOrDefault(c => c.Type == "tEXt" && IsOurTextChunk(c.Data));
 
         if (chunk == null)
             throw new ArgumentException("PNG metadata not found");
@@ -55,18 +82,6 @@ public class PngImage : Image
             chunk.Data.Length - zeroIndex - 1);
 
         return Convert.FromBase64String(base64);
-    }
-
-    private void ValidatePng()
-    {
-        if (imageBytes.Length < PngSignature.Length)
-            throw new ArgumentException("Invalid PNG file");
-
-        for (var i = 0; i < PngSignature.Length; i++)
-        {
-            if (imageBytes[i] != PngSignature[i])
-                throw new ArgumentException("Invalid PNG signature");
-        }
     }
 
     private static List<PngChunk> ReadChunks(byte[] imageBytes)
