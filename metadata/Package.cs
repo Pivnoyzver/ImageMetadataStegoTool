@@ -27,16 +27,16 @@ public class Package
         FileExtension = fileExtension;
     }
 
-    public Package(byte[] data)
+    public Package(byte[] text)
     {
         DataType = DataType.Text;
-        Data = (byte[])data.Clone();
+        Data = (byte[])text.Clone();
     }
 
-    public Package(byte[] data, string fileExtension)
+    public Package(byte[] bytes, string fileExtension)
     {
         DataType = DataType.File;
-        Data = (byte[])data.Clone();
+        Data = (byte[])bytes.Clone();
         FileExtension = fileExtension;
     }
 
@@ -56,7 +56,7 @@ public class Package
 
         if (fileExtensionBytes.Length > 0)
             fileExtensionBytes.CopyTo(span.Slice(16));
-        
+
         Data.AsSpan().CopyTo(span.Slice(16 + fileExtensionBytes.Length));
 
         return result;
