@@ -6,12 +6,6 @@ using System.Text;
 
 namespace metadata;
 
-public enum DataType
-{
-    Text,
-    File
-}
-
 public class Package
 {
     private static readonly byte[] Magic = Encoding.ASCII.GetBytes("stEG");
