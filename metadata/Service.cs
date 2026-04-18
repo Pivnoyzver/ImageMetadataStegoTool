@@ -1,0 +1,161 @@
+﻿using System;
+using System.IO;
+
+namespace metadata;
+
+public class Service
+{
+    public string TargetImagePath { get; private set; }
+    public string AttachedFilePath { get; private set; }
+    public string AttachedText { get; private set; }
+    public DataType CurrentDataType { get; private set; } = DataType.Text;
+
+    public string LastEncodedImagePath { get; private set; }
+    public string LastDecodedFilePath { get; private set; }
+    public string LastDecodedText { get; private set; }
+
+    /// <summary>
+    /// Выбор целевого изображения (в которое прячем или из которого читаем)
+    /// </summary>
+    public void SetTargetImage(string path)
+    {
+        if (!File.Exists(path))
+            throw new FileNotFoundException("Файл изображения не найден.", path);
+
+        TargetImagePath = path;
+    }
+
+    /// <summary>
+    /// Скрепка: прикрепление файла для сокрытия
+    /// </summary>
+    public void AttachFile(string path)
+    {
+        if (!File.Exists(path))
+            throw new FileNotFoundException("Прикрепляемый файл не найден.", path);
+
+        AttachedFilePath = path;
+        AttachedText = null;
+        CurrentDataType = DataType.File;
+    }
+
+    /// <summary>
+    /// Ввод текста для сокрытия
+    /// </summary>
+    public void AttachText(string text)
+    {
+        AttachedText = text;
+        AttachedFilePath = null;
+        CurrentDataType = DataType.Text;
+    }
+
+    /// <summary>
+    /// Зашифровать (спрятать данные (текст или файл) в целевом изображении)
+    /// </summary>
+    public void Encrypt()
+    {
+        if (string.IsNullOrEmpty(TargetImagePath))
+            throw new InvalidOperationException("Целевое изображение не выбрано.");
+
+        string input;
+
+        if (CurrentDataType == DataType.Text)
+        {
+            if (string.IsNullOrEmpty(AttachedText))
+                throw new InvalidOperationException("Текст для шифрования пуст.");
+            input = AttachedText;
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(AttachedFilePath))
+                throw new InvalidOperationException("Файл для шифрования не прикреплен.");
+            input = AttachedFilePath;
+        }
+
+        LastEncodedImagePath = Encoder.Encode(TargetImagePath, input, CurrentDataType);
+
+        LastDecodedFilePath = null;
+        LastDecodedText = null;
+    }
+
+    /// <summary>
+    /// Расшифровать (извлечь данные из изображения)
+    /// </summary>
+    public void Decrypt()
+    {
+        if (string.IsNullOrEmpty(TargetImagePath))
+            throw new InvalidOperationException("Не выбрано изображение для расшифровки.");
+
+        var result = Encoder.Decode(TargetImagePath);
+
+        if (result.Type == DataType.Text)
+        {
+            LastDecodedText = result.Output;
+            LastDecodedFilePath = null;
+        }
+        else if (result.Type == DataType.File)
+        {
+            LastDecodedFilePath = result.Output;
+            LastDecodedText = null;
+        }
+
+        LastEncodedImagePath = null;
+    }
+
+    /// <summary>
+    /// Сохранить (сохраняет результат в папку "Загрузки")
+    /// </summary>
+    public void Save()
+    {
+        string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+
+        if (!Directory.Exists(downloadsPath))
+        {
+            Directory.CreateDirectory(downloadsPath);
+        }
+
+        if (!string.IsNullOrEmpty(LastEncodedImagePath))
+        {
+            string fileName = Path.GetFileName(LastEncodedImagePath);
+            string destination = Path.Combine(downloadsPath, fileName);
+            File.Copy(LastEncodedImagePath, destination, overwrite: true);
+        }
+        else if (!string.IsNullOrEmpty(LastDecodedFilePath))
+        {
+            string fileName = Path.GetFileName(LastDecodedFilePath);
+            string destination = Path.Combine(downloadsPath, fileName);
+            File.Copy(LastDecodedFilePath, destination, overwrite: true);
+        }
+        else if (!string.IsNullOrEmpty(LastDecodedText))
+        {
+            string destination = Path.Combine(downloadsPath, "decoded_text.txt");
+            File.WriteAllText(destination, LastDecodedText);
+        }
+        else
+        {
+            throw new InvalidOperationException("Нет результатов для сохранения. Выполните шифрование или расшифровку.");
+        }
+    }
+
+    /// <summary>
+    /// Сохранить как... (сохраняет результат последней операции по указанному пути)
+    /// </summary>
+    public void SaveAs(string destinationPath)
+    {
+        if (!string.IsNullOrEmpty(LastEncodedImagePath))
+        {
+            File.Copy(LastEncodedImagePath, destinationPath, overwrite: true);
+        }
+        else if (!string.IsNullOrEmpty(LastDecodedFilePath))
+        {
+            File.Copy(LastDecodedFilePath, destinationPath, overwrite: true);
+        }
+        else if (!string.IsNullOrEmpty(LastDecodedText))
+        {
+            File.WriteAllText(destinationPath, LastDecodedText);
+        }
+        else
+        {
+            throw new InvalidOperationException("Нет результатов для сохранения. Выполните шифрование или расшифровку.");
+        }
+    }
+}
