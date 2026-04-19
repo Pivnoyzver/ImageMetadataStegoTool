@@ -2,8 +2,210 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="500"
         x:Class="metadata.MainWindow"
         Title="metadata">
-    Welcome to Avalonia!
+
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Color="#1A00FF" Offset="0.1"/>
+            <GradientStop Color="#FFFF00" Offset="0.9"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Window.Styles>
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="Courier New, monospace"/>
+            <Setter Property="Background" Value="#D9D9D9"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Margin" Value="10,10,0,10"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="TabItem:selected">
+            <Setter Property="Background" Value="#E6E6E6"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+        <Style Selector="Border.ContainerBorder">
+            <Setter Property="BorderBrush" Value="#C0C0C0"/>
+            <Setter Property="BorderThickness" Value="10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Background" Value="#C0C0C0"/>
+        </Style>
+
+        <Style Selector="Button.ActionBtn">
+            <Setter Property="Background" Value="#D9D9D9"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS, sans-serif, Arial"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,10,0,20"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="CornerRadius" Value="6"/>
+        </Style>
+
+        <Style Selector="TextBlock.DecText">
+            <Setter Property="FontFamily" Value="Impact, Arial Black, sans-serif"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style Selector="Button.AttachBtn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style Selector="TextBox.InputField">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Impact, Arial Black, sans-serif"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </Window.Styles>
+
+    <TabControl Background="Transparent">
+        <TabControl.Items>
+            <TabItem Header="encryption">
+                <Grid ColumnDefinitions="*, 2, *">
+                    <!-- Left Panel -->
+                    <DockPanel Grid.Column="0" Margin="10">
+                        <!-- Bottom button -->
+                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="EncodeBtn" Click="EncodeBtn_Click">
+                            <TextBlock>
+                                <Run Foreground="White">e</Run><Run>ncode encode encod</Run><Run Foreground="White">e</Run>
+                            </TextBlock>
+                        </Button>
+
+                        <Grid RowDefinitions="*,*">
+                            <!-- Top Box -->
+                            <Border Grid.Row="0" Classes="ContainerBorder">
+                                <Grid Background="#666666">
+                                    <TextBox Classes="InputField" x:Name="EncInputTextBox" Watermark="введите текст или прикрепите файл" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,70,5"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Spacing="5">
+                                        <Button Classes="AttachBtn" x:Name="EncAttachFileBtn" Click="EncAttachFileBtn_Click" Content="📎" ToolTip.Tip="Прикрепить файл/текст"/>
+                                        <Ellipse Width="20" Height="20" Fill="#D9D9D9"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Bottom Box -->
+                            <Border Grid.Row="1" Classes="ContainerBorder">
+                                <Grid RowDefinitions="*, Auto" Background="#333333">
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Spacing="5">
+                                        <Button Classes="AttachBtn" x:Name="EncAttachImageBtn" Click="EncAttachImageBtn_Click" Content="📎" ToolTip.Tip="Прикрепить картинку"/>
+                                        <Ellipse Width="20" Height="20" Fill="#D9D9D9"/>
+                                    </StackPanel>
+                                    <Border Grid.Row="1" Background="#737373" Height="24">
+                                        <TextBlock x:Name="EncTargetImageText" Text="Изображение не выбрано" Classes="DecText"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DockPanel>
+
+                    <!-- Divider -->
+                    <Rectangle Grid.Column="1" Fill="#000000" Width="2" VerticalAlignment="Stretch"/>
+
+                    <!-- Right Panel -->
+                    <DockPanel Grid.Column="2" Margin="10">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+                            <Button Content="rename" x:Name="EncRenameBtn" Click="EncRenameBtn_Click" Background="#D9D9D9" Width="100" CornerRadius="4" FontWeight="Bold" FontFamily="Impact, sans-serif" FontSize="18"/>
+                        </StackPanel>
+
+                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="EncSaveBtn" Click="EncSaveBtn_Click">
+                            <TextBlock>
+                                <Run Foreground="White">save </Run>
+                                <Run Foreground="Blue">save </Run>
+                                <Run Foreground="Red">save</Run>
+                            </TextBlock>
+                        </Button>
+
+                        <Border Classes="ContainerBorder">
+                            <Grid RowDefinitions="*,*">
+                                <!-- Top Box -->
+                                <Border Grid.Row="0" Background="#737373" BorderBrush="#C0C0C0" BorderThickness="0,0,0,10">
+                                    <TextBlock x:Name="EncOutputNameText" Text="Результат" Classes="DecText"/>
+                                </Border>
+                                <!-- Bottom Box -->
+                                <Border Grid.Row="1" Background="#666666"/>
+                            </Grid>
+                        </Border>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="decryption">
+                <Grid ColumnDefinitions="*, 2, *">
+                    <!-- Left Panel -->
+                    <DockPanel Grid.Column="0" Margin="10">
+                        <!-- Bottom button -->
+                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="DecodeBtn" Click="DecodeBtn_Click">
+                            <TextBlock>
+                                <Run Foreground="White">d</Run><Run>ecode decode decod</Run><Run Foreground="White">e</Run>
+                            </TextBlock>
+                        </Button>
+
+                        <Grid RowDefinitions="*,*">
+                            <Border Grid.Row="0" Classes="ContainerBorder">
+                                <Grid Background="#666666">
+                                    <TextBlock x:Name="DecTargetImageText" Text="Картинка не выбрана" Classes="DecText"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Spacing="5">
+                                        <Button Classes="AttachBtn" x:Name="DecAttachImageBtn" Click="DecAttachImageBtn_Click" Content="📎" ToolTip.Tip="Прикрепить картинку"/>
+                                        <Ellipse Width="20" Height="20" Fill="#D9D9D9"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <Border Grid.Row="1" Classes="ContainerBorder">
+                                <Grid Background="#333333">
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DockPanel>
+
+                    <!-- Divider -->
+                    <Rectangle Grid.Column="1" Fill="#000000" Width="2" VerticalAlignment="Stretch"/>
+
+                    <!-- Right Panel -->
+                    <DockPanel Grid.Column="2" Margin="10">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+                            <Button Content="rename" x:Name="DecRenameBtn" Click="DecRenameBtn_Click" Background="#D9D9D9" Width="100" CornerRadius="4" FontWeight="Bold" FontFamily="Impact, sans-serif" FontSize="18"/>
+                        </StackPanel>
+
+                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="DecSaveBtn" Click="DecSaveBtn_Click">
+                            <TextBlock>
+                                <Run Foreground="White">save </Run>
+                                <Run Foreground="Blue">save </Run>
+                                <Run Foreground="Red">save</Run>
+                            </TextBlock>
+                        </Button>
+
+                        <Border Classes="ContainerBorder">
+                            <Grid RowDefinitions="*,*">
+                                <!-- Top Box -->
+                                <Border Grid.Row="0" Background="#737373" BorderBrush="#C0C0C0" BorderThickness="0,0,0,10">
+                                    <TextBlock x:Name="DecOutputFileNameText" Text="Файл не извлечен" Classes="DecText"/>
+                                </Border>
+                                <!-- Bottom Box -->
+                                <Border Grid.Row="1" Background="#666666">
+                                    <TextBox Classes="InputField" x:Name="DecOutputTextBox" IsReadOnly="True" Watermark="расшифрованный текст" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+        </TabControl.Items>
+    </TabControl>
 </Window>
