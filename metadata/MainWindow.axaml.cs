@@ -6,6 +6,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
+using Avalonia.Input;
+using System.Linq;
+
 namespace metadata
 {
     public partial class MainWindow : Window
@@ -15,6 +18,60 @@ namespace metadata
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void EncInput_Drop(object? sender, DragEventArgs e)
+        {
+            if (e.Data.Contains(DataFormats.Files))
+            {
+                var file = e.Data.GetFiles()?.FirstOrDefault();
+                if (file != null)
+                {
+                    string path = file.Path.LocalPath;
+                    service.AttachFile(path);
+                    EncInputTextBox.Text = $"Файл прикреплен:\n{path}";
+                }
+            }
+        }
+
+        private void EncImage_Drop(object? sender, DragEventArgs e)
+        {
+            if (e.Data.Contains(DataFormats.Files))
+            {
+                var file = e.Data.GetFiles()?.FirstOrDefault();
+                if (file != null)
+                {
+                    string path = file.Path.LocalPath;
+                    string ext = Path.GetExtension(path).ToLower();
+
+                    if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
+                    {
+                        service.SetTargetImage(path);
+                        EncTargetImageText.Text = Path.GetFileName(path);
+                        EncTargetImagePreview.Source = new Bitmap(path);
+                    }
+                }
+            }
+        }
+
+        private void DecImage_Drop(object? sender, DragEventArgs e)
+        {
+            if (e.Data.Contains(DataFormats.Files))
+            {
+                var file = e.Data.GetFiles()?.FirstOrDefault();
+                if (file != null)
+                {
+                    string path = file.Path.LocalPath;
+                    string ext = Path.GetExtension(path).ToLower();
+
+                    if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
+                    {
+                        service.SetTargetImage(path);
+                        DecTargetImageText.Text = Path.GetFileName(path);
+                        DecTargetImagePreview.Source = new Bitmap(path);
+                    }
+                }
+            }
         }
 
         // --- ENCRYPTION -----------------------------------------
