@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using System;
 using System.IO;
@@ -51,6 +52,7 @@ namespace metadata
                 string path = files[0].Path.LocalPath;
                 service.SetTargetImage(path);
                 EncTargetImageText.Text = Path.GetFileName(path);
+                EncTargetImagePreview.Source = new Bitmap(path);
             }
         }
 
@@ -73,6 +75,7 @@ namespace metadata
 
                 service.Encrypt();
                 EncOutputNameText.Text = $"Успех!\nЗакодировано:\n{Path.GetFileName(service.LastEncodedImagePath)}";
+                EncOutputImagePreview.Source = new Bitmap(service.LastEncodedImagePath);
             }
             catch (Exception ex)
             {
@@ -89,13 +92,10 @@ namespace metadata
                 string? suggestPath = null;
 
                 if (!string.IsNullOrEmpty(service.LastEncodedImagePath))
-                {
                     suggestPath = service.LastEncodedImagePath;
-                }
+
                 else
-                {
                     throw new Exception("Нет результатов для сохранения.");
-                }
 
                 var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
                 {
@@ -134,6 +134,7 @@ namespace metadata
                 string path = files[0].Path.LocalPath;
                 service.SetTargetImage(path);
                 DecTargetImageText.Text = Path.GetFileName(path);
+                DecTargetImagePreview.Source = new Bitmap(path);
             }
         }
 

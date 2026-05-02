@@ -102,41 +102,6 @@ public class Service
     }
 
     /// <summary>
-    /// Сохранить (сохраняет результат в папку "Загрузки")
-    /// </summary>
-    public void Save()
-    {
-        string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-
-        if (!Directory.Exists(downloadsPath))
-        {
-            Directory.CreateDirectory(downloadsPath);
-        }
-
-        if (!string.IsNullOrEmpty(LastEncodedImagePath))
-        {
-            string fileName = Path.GetFileName(LastEncodedImagePath);
-            string destination = Path.Combine(downloadsPath, fileName);
-            File.Copy(LastEncodedImagePath, destination, overwrite: true);
-        }
-        else if (!string.IsNullOrEmpty(LastDecodedFilePath))
-        {
-            string fileName = Path.GetFileName(LastDecodedFilePath);
-            string destination = Path.Combine(downloadsPath, fileName);
-            File.Copy(LastDecodedFilePath, destination, overwrite: true);
-        }
-        else if (!string.IsNullOrEmpty(LastDecodedText))
-        {
-            string destination = Path.Combine(downloadsPath, "decoded_text.txt");
-            File.WriteAllText(destination, LastDecodedText);
-        }
-        else
-        {
-            throw new InvalidOperationException("Нет результатов для сохранения. Выполните шифрование или расшифровку.");
-        }
-    }
-
-    /// <summary>
     /// Сохранить как... (сохраняет результат последней операции по указанному пути)
     /// </summary>
     public void SaveAs(string destinationPath)

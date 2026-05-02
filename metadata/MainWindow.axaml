@@ -113,6 +113,7 @@
                             <!-- Bottom Box -->
                             <Border Grid.Row="1" Classes="ContainerBorder">
                                 <Grid RowDefinitions="*, Auto" Background="#333333">
+                                    <Image x:Name="EncTargetImagePreview" Grid.Row="0" Margin="5" Stretch="Uniform"/>
                                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Spacing="5">
                                         <Button Classes="AttachBtn" x:Name="EncAttachImageBtn" Click="EncAttachImageBtn_Click" Content="📎" ToolTip.Tip="Прикрепить картинку"/>
                                     </StackPanel>
@@ -142,7 +143,9 @@
                                 </Border>
                                 <!-- Bottom Box -->
                                 <Border Grid.Row="1" Classes="ContainerBorder">
-                                    <Grid Background="#333333"/>
+                                    <Grid Background="#333333">
+                                        <Image x:Name="EncOutputImagePreview" Margin="5" Stretch="Uniform"/>
+                                    </Grid>
                                 </Border>
                             </Grid>
                         </DockPanel>
@@ -158,16 +161,19 @@
                         <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="DecodeBtn" Click="DecodeBtn_Click" Content="DECODE" />
 
                         <Grid RowDefinitions="*,*">
+                            <!-- Top Box -->
                             <Border Grid.Row="0" Classes="ContainerBorder">
                                 <Grid Background="#666666">
-                                    <TextBlock x:Name="DecTargetImageText" Text="" Classes="DecText"/>
+                                    <TextBox Classes="InputField" x:Name="DecTargetImageText" IsReadOnly="True" Watermark="Прикрепленный файл..." HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,70,5"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Spacing="5">
                                         <Button Classes="AttachBtn" x:Name="DecAttachImageBtn" Click="DecAttachImageBtn_Click" Content="📎" ToolTip.Tip="Прикрепить картинку"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
+                            <!-- Bottom Box -->
                             <Border Grid.Row="1" Classes="ContainerBorder">
                                 <Grid Background="#333333">
+                                    <Image x:Name="DecTargetImagePreview" Margin="5" Stretch="Uniform"/>
                                 </Grid>
                             </Border>
                         </Grid>
