@@ -83,10 +83,23 @@ namespace metadata
             }
         }
 
-        private void HelpBtn_Click(object? sender, RoutedEventArgs e)
+        private async void HelpBtn_Click(object? sender, RoutedEventArgs e)
         {
-            // Здесь будет логика для открытия окна справки
-            Console.WriteLine("Открытие справки");
+            var dialog = new Window
+            {
+                Title = "Справка",
+                Width = 300,
+                Height = 200,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Content = new TextBlock
+                {
+                    Text = "пупупу",
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                    FontSize = 20
+                }
+            };
+            await dialog.ShowDialog(this);
         }
 
         private async void EncSaveBtn_Click(object? sender, RoutedEventArgs e)
