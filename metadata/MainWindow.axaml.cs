@@ -4,7 +4,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 
 using Avalonia.Input;
 using System.Linq;
