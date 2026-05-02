@@ -14,22 +14,33 @@
         <Style Selector="TabItem">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="Background" Value="#D9D9D9"/>
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="#A0A0A0"/>
+            <Setter Property="Foreground" Value="#434343"/>
+            <Setter Property="Padding" Value="25,0"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="TabItem:nth-child(1)">
+            <Setter Property="CornerRadius" Value="6,0,0,6"/>
             <Setter Property="Margin" Value="10,10,0,10"/>
-            <Setter Property="Padding" Value="20,5"/>
-            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="TabItem:nth-child(2)">
+            <Setter Property="CornerRadius" Value="0,6,6,0"/>
+            <Setter Property="Margin" Value="0,10,0,10"/>
         </Style>
         <Style Selector="TabItem:selected">
-            <Setter Property="Background" Value="#E6E6E6"/>
+            <Setter Property="Background" Value="#D9D9D9"/>
             <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
         <Style Selector="Border.ContainerBorder">
             <Setter Property="BorderBrush" Value="#D9D9D9"/>
             <Setter Property="BorderThickness" Value="6"/>
             <Setter Property="CornerRadius" Value="6"/>
-            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Margin" Value="10,0,10,10"/>
             <Setter Property="Background" Value="#D9D9D9"/>
         </Style>
 
@@ -37,9 +48,11 @@
             <Setter Property="Background" Value="#D9D9D9"/>
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Margin" Value="0,10,0,20"/>
             <Setter Property="Padding" Value="20,0"/>
             <Setter Property="Height" Value="36"/>
@@ -48,20 +61,22 @@
         </Style>
 
         <Style Selector="TextBlock.DecText">
-            <Setter Property="FontFamily" Value="Impact, Arial Black, sans-serif"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
 
         <Style Selector="Button.AttachBtn">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="Transparent"/>
-            <Setter Property="FontSize" Value="0"/>
-            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Foreground" Value="#D9D9D9"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="0"/>
             <Setter Property="Width" Value="30"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
 
         <Style Selector="TextBox.InputField">
@@ -69,7 +84,7 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="AcceptsReturn" Value="True"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
@@ -82,7 +97,7 @@
                     <!-- Left Panel -->
                     <DockPanel Grid.Column="0" Margin="10">
                         <!-- Bottom button -->
-                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="EncodeBtn" Click="EncodeBtn_Click" Content="" />
+                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="EncodeBtn" Click="EncodeBtn_Click" Content="ENCODE" />
 
                         <Grid RowDefinitions="*,*">
                             <!-- Top Box -->
@@ -90,11 +105,7 @@
                                 <Grid Background="#666666">
                                     <TextBox Classes="InputField" x:Name="EncInputTextBox" Watermark="" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,70,5"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Spacing="5">
-                                        <!-- Fake Ellipse behind button by using Grid -->
-                                        <Grid>
-                                            <Ellipse Width="20" Height="20" Fill="#D9D9D9"/>
-                                            <Button Classes="AttachBtn" x:Name="EncAttachFileBtn" Click="EncAttachFileBtn_Click" ToolTip.Tip="Прикрепить файл/текст"/>
-                                        </Grid>
+                                        <Button Classes="AttachBtn" x:Name="EncAttachFileBtn" Click="EncAttachFileBtn_Click" Content="📎" ToolTip.Tip="Прикрепить файл/текст"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -103,10 +114,7 @@
                             <Border Grid.Row="1" Classes="ContainerBorder">
                                 <Grid RowDefinitions="*, Auto" Background="#333333">
                                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Spacing="5">
-                                        <Grid>
-                                            <Ellipse Width="20" Height="20" Fill="#D9D9D9"/>
-                                            <Button Classes="AttachBtn" x:Name="EncAttachImageBtn" Click="EncAttachImageBtn_Click" ToolTip.Tip="Прикрепить картинку"/>
-                                        </Grid>
+                                        <Button Classes="AttachBtn" x:Name="EncAttachImageBtn" Click="EncAttachImageBtn_Click" Content="📎" ToolTip.Tip="Прикрепить картинку"/>
                                     </StackPanel>
                                     <Border Grid.Row="1" Background="#D9D9D9" Height="24" Margin="10,0,10,10" CornerRadius="4">
                                         <TextBlock x:Name="EncTargetImageText" Text="" Classes="DecText"/>
@@ -117,27 +125,28 @@
                     </DockPanel>
 
                     <!-- Divider -->
-                    <Rectangle Grid.Column="1" Fill="#2c2c2c" Width="2" VerticalAlignment="Stretch"/>
+                    <!-- <Rectangle Grid.Column="1" Fill="#2c2c2c" Width="2" VerticalAlignment="Stretch"/> -->
 
                     <!-- Right Panel -->
-                    <DockPanel Grid.Column="2" Margin="10">
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
-                            <Button Content="" x:Name="EncRenameBtn" Click="EncRenameBtn_Click" Background="#D9D9D9" Width="250" Height="30" CornerRadius="4" />
-                        </StackPanel>
+                    <Grid Grid.Column="2">
+                        <Button Content="rename" x:Name="EncRenameBtn" Click="EncRenameBtn_Click" Background="#D9D9D9" Foreground="Black" Width="120" Height="30" CornerRadius="4" FontSize="14" FontWeight="SemiBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-45,10,0"/>
+                        <DockPanel Margin="10">
+                            <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="EncSaveBtn" Click="EncSaveBtn_Click" Content="SAVE" />
 
-                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="EncSaveBtn" Click="EncSaveBtn_Click" Content="" />
-
-                        <Border Classes="ContainerBorder">
                             <Grid RowDefinitions="*,*">
                                 <!-- Top Box -->
-                                <Border Grid.Row="0" Background="#666666" BorderThickness="0">
-                                    <TextBlock x:Name="EncOutputNameText" Text="" Classes="DecText"/>
+                                <Border Grid.Row="0" Classes="ContainerBorder">
+                                    <Grid Background="#666666">
+                                        <TextBlock x:Name="EncOutputNameText" Text="" Classes="DecText"/>
+                                    </Grid>
                                 </Border>
                                 <!-- Bottom Box -->
-                                <Border Grid.Row="1" Background="#333333"/>
+                                <Border Grid.Row="1" Classes="ContainerBorder">
+                                    <Grid Background="#333333"/>
+                                </Border>
                             </Grid>
-                        </Border>
-                    </DockPanel>
+                        </DockPanel>
+                    </Grid>
                 </Grid>
             </TabItem>
 
@@ -146,17 +155,14 @@
                     <!-- Left Panel -->
                     <DockPanel Grid.Column="0" Margin="10">
                         <!-- Bottom button -->
-                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="DecodeBtn" Click="DecodeBtn_Click" Content="" />
+                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="DecodeBtn" Click="DecodeBtn_Click" Content="DECODE" />
 
                         <Grid RowDefinitions="*,*">
                             <Border Grid.Row="0" Classes="ContainerBorder">
                                 <Grid Background="#666666">
                                     <TextBlock x:Name="DecTargetImageText" Text="" Classes="DecText"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Spacing="5">
-                                        <Grid>
-                                            <Ellipse Width="20" Height="20" Fill="#D9D9D9"/>
-                                            <Button Classes="AttachBtn" x:Name="DecAttachImageBtn" Click="DecAttachImageBtn_Click" ToolTip.Tip="Прикрепить картинку"/>
-                                        </Grid>
+                                        <Button Classes="AttachBtn" x:Name="DecAttachImageBtn" Click="DecAttachImageBtn_Click" Content="📎" ToolTip.Tip="Прикрепить картинку"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -168,29 +174,30 @@
                     </DockPanel>
 
                     <!-- Divider -->
-                    <Rectangle Grid.Column="1" Fill="#2c2c2c" Width="2" VerticalAlignment="Stretch"/>
+                    <!-- <Rectangle Grid.Column="1" Fill="#2c2c2c" Width="2" VerticalAlignment="Stretch"/> -->
 
                     <!-- Right Panel -->
-                    <DockPanel Grid.Column="2" Margin="10">
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
-                            <Button Content="" x:Name="DecRenameBtn" Click="DecRenameBtn_Click" Background="#D9D9D9" Width="250" Height="30" CornerRadius="4" />
-                        </StackPanel>
+                    <Grid Grid.Column="2">
+                        <Button Content="rename" x:Name="DecRenameBtn" Click="DecRenameBtn_Click" Background="#D9D9D9" Foreground="Black" Width="120" Height="30" CornerRadius="4" FontSize="14" FontWeight="SemiBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-45,10,0"/>
+                        <DockPanel Margin="10">
+                            <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="DecSaveBtn" Click="DecSaveBtn_Click" Content="SAVE" />
 
-                        <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="DecSaveBtn" Click="DecSaveBtn_Click" Content="" />
-
-                        <Border Classes="ContainerBorder">
                             <Grid RowDefinitions="*,*">
                                 <!-- Top Box -->
-                                <Border Grid.Row="0" Background="#666666" BorderThickness="0">
-                                    <TextBlock x:Name="DecOutputFileNameText" Text="" Classes="DecText"/>
+                                <Border Grid.Row="0" Classes="ContainerBorder">
+                                    <Grid Background="#666666">
+                                        <TextBlock x:Name="DecOutputFileNameText" Text="" Classes="DecText"/>
+                                    </Grid>
                                 </Border>
                                 <!-- Bottom Box -->
-                                <Border Grid.Row="1" Background="#666666">
-                                    <TextBox Classes="InputField" x:Name="DecOutputTextBox" IsReadOnly="True" Watermark="" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5"/>
+                                <Border Grid.Row="1" Classes="ContainerBorder">
+                                    <Grid Background="#666666">
+                                        <TextBox Classes="InputField" x:Name="DecOutputTextBox" IsReadOnly="True" Watermark="" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5"/>
+                                    </Grid>
                                 </Border>
                             </Grid>
-                        </Border>
-                    </DockPanel>
+                        </DockPanel>
+                    </Grid>
                 </Grid>
             </TabItem>
         </TabControl.Items>
