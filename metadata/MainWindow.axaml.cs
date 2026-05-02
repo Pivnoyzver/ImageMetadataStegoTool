@@ -82,12 +82,32 @@ namespace metadata
 
         private async void EncRenameBtn_Click(object? sender, RoutedEventArgs e) => await SaveResultRename();
 
-        private void EncSaveBtn_Click(object? sender, RoutedEventArgs e)
+        private async void EncSaveBtn_Click(object? sender, RoutedEventArgs e)
         {
             try
             {
-                service.Save();
-                EncOutputNameText.Text += "\n(Сохранено в Загрузки)";
+                string? suggestPath = null;
+
+                if (!string.IsNullOrEmpty(service.LastEncodedImagePath))
+                {
+                    suggestPath = service.LastEncodedImagePath;
+                }
+                else
+                {
+                    throw new Exception("Нет результатов для сохранения.");
+                }
+
+                var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+                {
+                    Title = "Сохранить закодированное изображение как...",
+                    SuggestedFileName = Path.GetFileName(suggestPath)
+                });
+
+                if (file != null)
+                {
+                    service.SaveAs(file.Path.LocalPath);
+                    EncOutputNameText.Text += "\n(Успешно сохранено)";
+                }
             }
             catch (Exception ex)
             {
@@ -143,12 +163,32 @@ namespace metadata
 
         private async void DecRenameBtn_Click(object? sender, RoutedEventArgs e) => await SaveResultRename();
 
-        private void DecSaveBtn_Click(object? sender, RoutedEventArgs e)
+        private async void DecSaveBtn_Click(object? sender, RoutedEventArgs e)
         {
             try
             {
-                service.Save();
-                DecOutputFileNameText.Text += "\n(Сохранено в Загрузки)";
+                string? suggestPath = null;
+
+                if (!string.IsNullOrEmpty(service.LastDecodedFilePath))
+                    suggestPath = service.LastDecodedFilePath;
+
+                else if (!string.IsNullOrEmpty(service.LastDecodedText))
+                    suggestPath = "decoded_text.txt";
+
+                else
+                    throw new Exception("Нет результатов для сохранения.");
+
+                var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+                {
+                    Title = "Сохранить расшифрованное как...",
+                    SuggestedFileName = Path.GetFileName(suggestPath)
+                });
+
+                if (file != null)
+                {
+                    service.SaveAs(file.Path.LocalPath);
+                    DecOutputFileNameText.Text += "\n(Успешно сохранено)";
+                }
             }
             catch (Exception ex)
             {
