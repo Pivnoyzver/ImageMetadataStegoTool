@@ -36,11 +36,24 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
+        <Style Selector="TabItem:pointerover">
+            <Setter Property="Background" Value="#D9D9D9"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+        <!-- Дополнительное переопределение для внутренних элементов шаблона в Avalonia (чтобы точно перебить стандартный hover) -->
+        <Style Selector="TabItem:pointerover /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="#D9D9D9"/>
+        </Style>
+        <Style Selector="TabItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
         <Style Selector="Border.ContainerBorder">
             <Setter Property="BorderBrush" Value="#D9D9D9"/>
             <Setter Property="BorderThickness" Value="6"/>
             <Setter Property="CornerRadius" Value="6"/>
-            <Setter Property="Margin" Value="10,0,10,10"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
             <Setter Property="Background" Value="#D9D9D9"/>
         </Style>
 
@@ -130,9 +143,11 @@
 
                     <!-- Right Panel -->
                     <Grid Grid.Column="2">
-                        <Button Content="rename" x:Name="EncRenameBtn" Click="EncRenameBtn_Click" Background="#D9D9D9" Foreground="Black" Width="120" Height="30" CornerRadius="4" FontSize="14" FontWeight="SemiBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-45,10,0"/>
+                        <Button x:Name="EncHelpBtn" Click="HelpBtn_Click" Background="#D9D9D9" Foreground="Black" Width="30" Height="30" CornerRadius="15" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-40,10,0">
+                            <TextBlock Text="?" FontSize="18" FontWeight="Bold" Margin="0,2,0,0" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Button>
                         <DockPanel Margin="10">
-                            <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="EncSaveBtn" Click="EncSaveBtn_Click" Content="SAVE" />
+                            <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="EncSaveBtn" Click="EncSaveBtn_Click" Content="SAVE AS" />
 
                             <Grid RowDefinitions="*,*">
                                 <!-- Top Box -->
@@ -184,21 +199,16 @@
 
                     <!-- Right Panel -->
                     <Grid Grid.Column="2">
-                        <Button Content="rename" x:Name="DecRenameBtn" Click="DecRenameBtn_Click" Background="#D9D9D9" Foreground="Black" Width="120" Height="30" CornerRadius="4" FontSize="14" FontWeight="SemiBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-45,10,0"/>
+                        <Button x:Name="DecHelpBtn" Click="HelpBtn_Click" Background="#D9D9D9" Foreground="Black" Width="30" Height="30" CornerRadius="15" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-40,10,0">
+                            <TextBlock Text="?" FontSize="18" FontWeight="Bold" Margin="0,2,0,0" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Button>
                         <DockPanel Margin="10">
-                            <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="DecSaveBtn" Click="DecSaveBtn_Click" Content="SAVE" />
+                            <Button DockPanel.Dock="Bottom" Classes="ActionBtn" x:Name="DecSaveBtn" Click="DecSaveBtn_Click" Content="SAVE AS" />
 
-                            <Grid RowDefinitions="*,*">
-                                <!-- Top Box -->
-                                <Border Grid.Row="0" Classes="ContainerBorder">
+                            <Grid>
+                                <Border Classes="ContainerBorder">
                                     <Grid Background="#666666">
-                                        <TextBlock x:Name="DecOutputFileNameText" Text="" Classes="DecText"/>
-                                    </Grid>
-                                </Border>
-                                <!-- Bottom Box -->
-                                <Border Grid.Row="1" Classes="ContainerBorder">
-                                    <Grid Background="#666666">
-                                        <TextBox Classes="InputField" x:Name="DecOutputTextBox" IsReadOnly="True" Watermark="" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5"/>
+                                        <TextBox Classes="InputField" x:Name="DecOutputTextBox" IsReadOnly="True" Watermark="Результат расшифровки..." HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5"/>
                                     </Grid>
                                 </Border>
                             </Grid>

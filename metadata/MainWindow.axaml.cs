@@ -83,7 +83,11 @@ namespace metadata
             }
         }
 
-        private async void EncRenameBtn_Click(object? sender, RoutedEventArgs e) => await SaveResultRename();
+        private void HelpBtn_Click(object? sender, RoutedEventArgs e)
+        {
+            // Здесь будет логика для открытия окна справки
+            Console.WriteLine("Открытие справки");
+        }
 
         private async void EncSaveBtn_Click(object? sender, RoutedEventArgs e)
         {
@@ -125,7 +129,7 @@ namespace metadata
                 AllowMultiple = false,
                 FileTypeFilter = new[]
                 {
-                    new FilePickerFileType("Images") { Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp" } }
+                    new FilePickerFileType("Images") { Patterns = new[] { "*.png", "*.jpg", "*.jpeg"} }
                 }
             });
 
@@ -146,23 +150,18 @@ namespace metadata
 
                 if (service.LastDecodedText != null)
                 {
-                    DecOutputFileNameText.Text = "Извлечен текст!";
                     DecOutputTextBox.Text = service.LastDecodedText;
                 }
                 else if (service.LastDecodedFilePath != null)
                 {
-                    DecOutputFileNameText.Text = $"Извлечен файл:\n{Path.GetFileName(service.LastDecodedFilePath)}";
-                    DecOutputTextBox.Text = string.Empty;
+                    DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(service.LastDecodedFilePath)}";
                 }
             }
             catch (Exception ex)
             {
-                DecOutputFileNameText.Text = $"Ошибка:\n{ex.Message}";
-                DecOutputTextBox.Text = string.Empty;
+                DecOutputTextBox.Text = $"Ошибка:\n{ex.Message}";
             }
         }
-
-        private async void DecRenameBtn_Click(object? sender, RoutedEventArgs e) => await SaveResultRename();
 
         private async void DecSaveBtn_Click(object? sender, RoutedEventArgs e)
         {
@@ -188,52 +187,15 @@ namespace metadata
                 if (file != null)
                 {
                     service.SaveAs(file.Path.LocalPath);
-                    DecOutputFileNameText.Text += "\n(Успешно сохранено)";
+                    if (service.LastDecodedText != null)
+                        DecOutputTextBox.Text = service.LastDecodedText + "\n\n(Успешно сохранено)";
+                    else if (service.LastDecodedFilePath != null)
+                        DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(service.LastDecodedFilePath)}\n\n(Успешно сохранено)";
                 }
             }
             catch (Exception ex)
             {
-                DecOutputFileNameText.Text = $"Ошибка сохранения:\n{ex.Message}";
-            }
-        }
-
-        private async Task SaveResultRename()
-        {
-            try
-            {
-                string? suggestPath = null;
-
-                if (!string.IsNullOrEmpty(service.LastEncodedImagePath))
-                {
-                    suggestPath = service.LastEncodedImagePath;
-                }
-                else if (!string.IsNullOrEmpty(service.LastDecodedFilePath))
-                {
-                    suggestPath = service.LastDecodedFilePath;
-                }
-                else if (!string.IsNullOrEmpty(service.LastDecodedText))
-                {
-                    suggestPath = "decoded_text.txt";
-                }
-                else
-                {
-                    throw new Exception("Нет результатов для сохранения.");
-                }
-
-                var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-                {
-                    Title = "Сохранить как...",
-                    SuggestedFileName = Path.GetFileName(suggestPath)
-                });
-
-                if (file != null)
-                {
-                    service.SaveAs(file.Path.LocalPath);
-                }
-            }
-            catch
-            {
-
+                DecOutputTextBox.Text = $"Ошибка сохранения:\n{ex.Message}";
             }
         }
     }
