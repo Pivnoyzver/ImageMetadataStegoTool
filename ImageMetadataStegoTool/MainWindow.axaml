@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="620"
         Width="1000" Height="620"
         x:Class="metadata.MainWindow"
-        Title="metadata">
+        Title="ImageMetadataStegoTool">
 
     <Window.Background>
         <SolidColorBrush Color="#434343"/>
