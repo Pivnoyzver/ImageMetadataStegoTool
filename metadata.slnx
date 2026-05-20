@@ -1,4 +1,0 @@
-<Solution>
-  <Project Path="metadata.Tests/metadata.Tests.csproj" />
-  <Project Path="metadata/metadata.csproj" />
-</Solution>
