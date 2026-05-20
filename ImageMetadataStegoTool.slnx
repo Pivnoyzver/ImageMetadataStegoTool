@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="metadata.Tests/ImageMetadataStegoTool.Tests.csproj" />
+  <Project Path="metadata/ImageMetadataStegoTool.csproj" />
+</Solution>

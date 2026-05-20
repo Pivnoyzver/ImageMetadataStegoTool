@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\metadata\metadata.csproj" />
+    <ProjectReference Include="..\metadata\ImageMetadataStegoTool.csproj" />
   </ItemGroup>
 
 </Project>
