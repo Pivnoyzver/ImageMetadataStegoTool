@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace metadata.Tests;
+namespace ImageMetadataStegoTool.Tests;
 
 [TestFixture]
 public class PackageTests

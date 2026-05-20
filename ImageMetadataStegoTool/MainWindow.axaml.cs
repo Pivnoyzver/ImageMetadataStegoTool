@@ -8,7 +8,7 @@ using System.IO;
 using Avalonia.Input;
 using System.Linq;
 
-namespace metadata
+namespace ImageMetadataStegoTool
 {
     public partial class MainWindow : Window
     {

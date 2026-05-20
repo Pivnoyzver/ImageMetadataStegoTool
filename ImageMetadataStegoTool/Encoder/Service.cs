@@ -1,7 +1,7 @@
-п»їusing System;
+using System;
 using System.IO;
 
-namespace metadata;
+namespace ImageMetadataStegoTool;
 
 public class Service
 {
@@ -15,23 +15,23 @@ public class Service
     public string LastDecodedText { get; private set; }
 
     /// <summary>
-    /// Р’С‹Р±РѕСЂ С†РµР»РµРІРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ (РІ РєРѕС‚РѕСЂРѕРµ РїСЂСЏС‡РµРј РёР»Рё РёР· РєРѕС‚РѕСЂРѕРіРѕ С‡РёС‚Р°РµРј)
+    /// Выбор целевого изображения (в которое прячем или из которого читаем)
     /// </summary>
     public void SetTargetImage(string path)
     {
         if (!File.Exists(path))
-            throw new FileNotFoundException("Р¤Р°Р№Р» РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РЅРµ РЅР°Р№РґРµРЅ.", path);
+            throw new FileNotFoundException("Файл изображения не найден.", path);
 
         TargetImagePath = path;
     }
 
     /// <summary>
-    /// РЎРєСЂРµРїРєР°: РїСЂРёРєСЂРµРїР»РµРЅРёРµ С„Р°Р№Р»Р° РґР»СЏ СЃРѕРєСЂС‹С‚РёСЏ
+    /// Скрепка: прикрепление файла для сокрытия
     /// </summary>
     public void AttachFile(string path)
     {
         if (!File.Exists(path))
-            throw new FileNotFoundException("РџСЂРёРєСЂРµРїР»СЏРµРјС‹Р№ С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ.", path);
+            throw new FileNotFoundException("Прикрепляемый файл не найден.", path);
 
         AttachedFilePath = path;
         AttachedText = null;
@@ -39,7 +39,7 @@ public class Service
     }
 
     /// <summary>
-    /// Р’РІРѕРґ С‚РµРєСЃС‚Р° РґР»СЏ СЃРѕРєСЂС‹С‚РёСЏ
+    /// Ввод текста для сокрытия
     /// </summary>
     public void AttachText(string text)
     {
@@ -49,25 +49,25 @@ public class Service
     }
 
     /// <summary>
-    /// Р—Р°С€РёС„СЂРѕРІР°С‚СЊ (СЃРїСЂСЏС‚Р°С‚СЊ РґР°РЅРЅС‹Рµ (С‚РµРєСЃС‚ РёР»Рё С„Р°Р№Р») РІ С†РµР»РµРІРѕРј РёР·РѕР±СЂР°Р¶РµРЅРёРё)
+    /// Зашифровать (спрятать данные (текст или файл) в целевом изображении)
     /// </summary>
     public void Encrypt()
     {
         if (string.IsNullOrEmpty(TargetImagePath))
-            throw new InvalidOperationException("Р¦РµР»РµРІРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РЅРµ РІС‹Р±СЂР°РЅРѕ.");
+            throw new InvalidOperationException("Целевое изображение не выбрано.");
 
         string input;
 
         if (CurrentDataType == DataType.Text)
         {
             if (string.IsNullOrEmpty(AttachedText))
-                throw new InvalidOperationException("РўРµРєСЃС‚ РґР»СЏ С€РёС„СЂРѕРІР°РЅРёСЏ РїСѓСЃС‚.");
+                throw new InvalidOperationException("Текст для шифрования пуст.");
             input = AttachedText;
         }
         else
         {
             if (string.IsNullOrEmpty(AttachedFilePath))
-                throw new InvalidOperationException("Р¤Р°Р№Р» РґР»СЏ С€РёС„СЂРѕРІР°РЅРёСЏ РЅРµ РїСЂРёРєСЂРµРїР»РµРЅ.");
+                throw new InvalidOperationException("Файл для шифрования не прикреплен.");
             input = AttachedFilePath;
         }
 
@@ -78,12 +78,12 @@ public class Service
     }
 
     /// <summary>
-    /// Р Р°СЃС€РёС„СЂРѕРІР°С‚СЊ (РёР·РІР»РµС‡СЊ РґР°РЅРЅС‹Рµ РёР· РёР·РѕР±СЂР°Р¶РµРЅРёСЏ)
+    /// Расшифровать (извлечь данные из изображения)
     /// </summary>
     public void Decrypt()
     {
         if (string.IsNullOrEmpty(TargetImagePath))
-            throw new InvalidOperationException("РќРµ РІС‹Р±СЂР°РЅРѕ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РґР»СЏ СЂР°СЃС€РёС„СЂРѕРІРєРё.");
+            throw new InvalidOperationException("Не выбрано изображение для расшифровки.");
 
         var result = Encoder.Decode(TargetImagePath);
 
@@ -102,7 +102,7 @@ public class Service
     }
 
     /// <summary>
-    /// РЎРѕС…СЂР°РЅРёС‚СЊ РєР°Рє... (СЃРѕС…СЂР°РЅСЏРµС‚ СЂРµР·СѓР»СЊС‚Р°С‚ РїРѕСЃР»РµРґРЅРµР№ РѕРїРµСЂР°С†РёРё РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ РїСѓС‚Рё)
+    /// Сохранить как... (сохраняет результат последней операции по указанному пути)
     /// </summary>
     public void SaveAs(string destinationPath)
     {
@@ -120,7 +120,7 @@ public class Service
         }
         else
         {
-            throw new InvalidOperationException("РќРµС‚ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ. Р’С‹РїРѕР»РЅРёС‚Рµ С€РёС„СЂРѕРІР°РЅРёРµ РёР»Рё СЂР°СЃС€РёС„СЂРѕРІРєСѓ.");
+            throw new InvalidOperationException("Нет результатов для сохранения. Выполните шифрование или расшифровку.");
         }
     }
 }

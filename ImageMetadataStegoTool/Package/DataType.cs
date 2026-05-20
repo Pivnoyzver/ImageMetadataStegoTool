@@ -1,4 +1,4 @@
-﻿namespace metadata;
+namespace ImageMetadataStegoTool;
 
 public enum DataType
 {

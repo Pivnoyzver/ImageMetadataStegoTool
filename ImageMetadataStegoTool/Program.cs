@@ -1,7 +1,7 @@
-﻿using Avalonia;
+using Avalonia;
 using System;
 
-namespace metadata
+namespace ImageMetadataStegoTool
 {
     internal class Program
     {

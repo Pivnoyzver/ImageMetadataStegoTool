@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
-namespace metadata;
+namespace ImageMetadataStegoTool;
 
 public class Encoder
 {
