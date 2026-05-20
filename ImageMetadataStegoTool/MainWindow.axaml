@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="500"
         x:Class="metadata.MainWindow"
-        Title="metadata">
+        Title="ImageMetadataStegoTool">
 
     <Window.Background>
         <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
