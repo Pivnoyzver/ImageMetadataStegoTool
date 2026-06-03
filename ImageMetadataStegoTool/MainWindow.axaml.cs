@@ -73,6 +73,25 @@ namespace ImageMetadataStegoTool
             }
         }
 
+        private async void HelpBtn_Click(object? sender, RoutedEventArgs e)
+        {
+            var dialog = new Window
+            {
+                Title = "Справка",
+                Width = 300,
+                Height = 200,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Content = new TextBlock
+                {
+                    Text = "пупупу",
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                    FontSize = 20
+                }
+            };
+            await dialog.ShowDialog(this);
+        }
+
         // --- ENCRYPTION -----------------------------------------
 
         private async void EncAttachFileBtn_Click(object? sender, RoutedEventArgs e)
@@ -137,25 +156,6 @@ namespace ImageMetadataStegoTool
             {
                 EncOutputNameText.Text = $"Ошибка:\n{ex.Message}";
             }
-        }
-
-        private async void HelpBtn_Click(object? sender, RoutedEventArgs e)
-        {
-            var dialog = new Window
-            {
-                Title = "Справка",
-                Width = 300,
-                Height = 200,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Content = new TextBlock
-                {
-                    Text = "пупупу",
-                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-                    FontSize = 20
-                }
-            };
-            await dialog.ShowDialog(this);
         }
 
         private async void EncSaveBtn_Click(object? sender, RoutedEventArgs e)
