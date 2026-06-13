@@ -15,23 +15,23 @@ public class Service
     public string LastDecodedText { get; private set; }
 
     /// <summary>
-    /// Выбор целевого изображения (в которое прячем или из которого читаем)
+    /// Р’С‹Р±РѕСЂ С†РµР»РµРІРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ (РІ РєРѕС‚РѕСЂРѕРµ РїСЂСЏС‡РµРј РёР»Рё РёР· РєРѕС‚РѕСЂРѕРіРѕ С‡РёС‚Р°РµРј)
     /// </summary>
     public void SetTargetImage(string path)
     {
         if (!File.Exists(path))
-            throw new FileNotFoundException("Файл изображения не найден.", path);
+            throw new FileNotFoundException("Р¤Р°Р№Р» РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РЅРµ РЅР°Р№РґРµРЅ.", path);
 
         TargetImagePath = path;
     }
 
     /// <summary>
-    /// Скрепка: прикрепление файла для сокрытия
+    /// РЎРєСЂРµРїРєР°: РїСЂРёРєСЂРµРїР»РµРЅРёРµ С„Р°Р№Р»Р° РґР»СЏ СЃРѕРєСЂС‹С‚РёСЏ
     /// </summary>
     public void AttachFile(string path)
     {
         if (!File.Exists(path))
-            throw new FileNotFoundException("Прикрепляемый файл не найден.", path);
+            throw new FileNotFoundException("РџСЂРёРєСЂРµРїР»СЏРµРјС‹Р№ С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ.", path);
 
         AttachedFilePath = path;
         AttachedText = null;
@@ -39,7 +39,7 @@ public class Service
     }
 
     /// <summary>
-    /// Ввод текста для сокрытия
+    /// Р’РІРѕРґ С‚РµРєСЃС‚Р° РґР»СЏ СЃРѕРєСЂС‹С‚РёСЏ
     /// </summary>
     public void AttachText(string text)
     {
@@ -49,7 +49,7 @@ public class Service
     }
 
     /// <summary>
-    /// Зашифровать (спрятать данные (текст или файл) в целевом изображении)
+    /// Р—Р°С€РёС„СЂРѕРІР°С‚СЊ (СЃРїСЂСЏС‚Р°С‚СЊ РґР°РЅРЅС‹Рµ (С‚РµРєСЃС‚ РёР»Рё С„Р°Р№Р») РІ С†РµР»РµРІРѕРј РёР·РѕР±СЂР°Р¶РµРЅРёРё)
     /// </summary>
     public void Encrypt()
     {
@@ -58,20 +58,20 @@ public class Service
         LastDecodedText = null;
 
         if (string.IsNullOrEmpty(TargetImagePath))
-            throw new InvalidOperationException("Целевое изображение не выбрано.");
+            throw new InvalidOperationException("Р¦РµР»РµРІРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РЅРµ РІС‹Р±СЂР°РЅРѕ.");
 
         string input;
 
         if (CurrentDataType == DataType.Text)
         {
             if (string.IsNullOrEmpty(AttachedText))
-                throw new InvalidOperationException("Текст для шифрования пуст.");
+                throw new InvalidOperationException("РўРµРєСЃС‚ РґР»СЏ С€РёС„СЂРѕРІР°РЅРёСЏ РїСѓСЃС‚.");
             input = AttachedText;
         }
         else
         {
             if (string.IsNullOrEmpty(AttachedFilePath))
-                throw new InvalidOperationException("Файл для шифрования не прикреплен.");
+                throw new InvalidOperationException("Р¤Р°Р№Р» РґР»СЏ С€РёС„СЂРѕРІР°РЅРёСЏ РЅРµ РїСЂРёРєСЂРµРїР»РµРЅ.");
             input = AttachedFilePath;
         }
 
@@ -79,7 +79,7 @@ public class Service
     }
 
     /// <summary>
-    /// Расшифровать (извлечь данные из изображения)
+    /// Р Р°СЃС€РёС„СЂРѕРІР°С‚СЊ (РёР·РІР»РµС‡СЊ РґР°РЅРЅС‹Рµ РёР· РёР·РѕР±СЂР°Р¶РµРЅРёСЏ)
     /// </summary>
     public void Decrypt()
     {
@@ -88,7 +88,7 @@ public class Service
         LastDecodedText = null;
 
         if (string.IsNullOrEmpty(TargetImagePath))
-            throw new InvalidOperationException("Не выбрано изображение для расшифровки.");
+            throw new InvalidOperationException("РќРµ РІС‹Р±СЂР°РЅРѕ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РґР»СЏ СЂР°СЃС€РёС„СЂРѕРІРєРё.");
 
         var result = Encoder.Decode(TargetImagePath);
 
@@ -100,7 +100,7 @@ public class Service
     }
 
     /// <summary>
-    /// Сохранить как... (сохраняет результат последней операции по указанному пути)
+    /// РЎРѕС…СЂР°РЅРёС‚СЊ РєР°Рє... (СЃРѕС…СЂР°РЅСЏРµС‚ СЂРµР·СѓР»СЊС‚Р°С‚ РїРѕСЃР»РµРґРЅРµР№ РѕРїРµСЂР°С†РёРё РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ РїСѓС‚Рё)
     /// </summary>
     public void SaveAs(string destinationPath)
     {
@@ -114,13 +114,13 @@ public class Service
             File.WriteAllText(destinationPath, LastDecodedText);
 
         else
-            throw new InvalidOperationException("Нет результатов для сохранения.");
+            throw new InvalidOperationException("РќРµС‚ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ.");
     }
 
     public string? GetMagicFileAttachMessage()
     {
         return string.IsNullOrEmpty(AttachedFilePath)
             ? null
-            : $"Файл прикреплен:\n{Path.GetFileName(AttachedFilePath)}";
+            : $"Р¤Р°Р№Р» РїСЂРёРєСЂРµРїР»РµРЅ:\n{Path.GetFileName(AttachedFilePath)}";
     }
 }
