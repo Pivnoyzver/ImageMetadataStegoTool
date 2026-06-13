@@ -156,7 +156,7 @@
 				</Style>
 			</TabControl.Styles>
 
-			<TabItem Header="Шифрование">
+			<TabItem Header="Кодирование">
 				<Grid ColumnDefinitions="*, 54, *" Margin="0,15,0,0">
 
 					<Grid Grid.Column="0" RowDefinitions="200, 15, *, 15, Auto">
@@ -211,7 +211,7 @@
 						<Button Grid.Row="4" Classes="ActionBtn" Background="#4F5272" Click="EncodeBtn_Click">
 							<StackPanel Orientation="Horizontal" Spacing="10">
 								<PathIcon Data="{StaticResource LockIcon}" Foreground="#A0A0B5" Width="18" Height="18" VerticalAlignment="Center"/>
-								<TextBlock Text="Зашифровать" VerticalAlignment="Center"/>
+								<TextBlock Text="Кодировать" VerticalAlignment="Center"/>
 							</StackPanel>
 						</Button>
 					</Grid>
@@ -226,7 +226,7 @@
 											<TextBlock Text="Имя файла" FontWeight="Bold" Foreground="White" FontSize="14" VerticalAlignment="Center"/>
 										</StackPanel>
 									</Border>
-									<TextBlock Text="Имя зашифрованного изображения" Foreground="#9797A1" FontSize="11"/>
+									<TextBlock Text="Имя закодированного изображения" Foreground="#9797A1" FontSize="11"/>
 								</StackPanel>
 								<Border Grid.Row="1" Background="#1D1B28" CornerRadius="6" Margin="0,8,0,0" Padding="10">
 									<TextBlock x:Name="EncOutputNameText" Foreground="White" TextWrapping="Wrap" VerticalAlignment="Top"/>
@@ -244,7 +244,7 @@
 										<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
 											<PathIcon Data="{StaticResource ImageIcon}" Width="44" Height="44" Foreground="#A0A0B5" Margin="0,0,0,10" HorizontalAlignment="Center"/>
 											<StackPanel MinHeight="80">
-												<TextBlock Text="Зашифрованное изображение" FontWeight="Bold" Foreground="White" TextAlignment="Center" FontSize="15" TextWrapping="Wrap" Margin="0,0,0,5"/>
+												<TextBlock Text="Закодированное изображение" FontWeight="Bold" Foreground="White" TextAlignment="Center" FontSize="15" TextWrapping="Wrap" Margin="0,0,0,5"/>
 												<TextBlock Text="Сохраните итоговое изображение" Foreground="#9797A1" FontSize="11" TextAlignment="Center" TextWrapping="Wrap"/>
 											</StackPanel>
 										</StackPanel>
@@ -263,7 +263,7 @@
 				</Grid>
 			</TabItem>
 
-			<TabItem Header="Дешифрование">
+			<TabItem Header="Декодирование">
 				<Grid ColumnDefinitions="*, 54, *" Margin="0,15,0,0">
 
 					<Grid Grid.Column="0" RowDefinitions="200, 15, *, 15, Auto">
@@ -276,7 +276,7 @@
 											<TextBlock Text="Имя файла" FontWeight="Bold" Foreground="White" FontSize="14" VerticalAlignment="Center"/>
 										</StackPanel>
 									</Border>
-									<TextBlock Text="Имя зашифрованного изображения" Foreground="#9797A1" FontSize="11"/>
+									<TextBlock Text="Имя закодированного изображения" Foreground="#9797A1" FontSize="11"/>
 								</StackPanel>
 								<Border Grid.Row="1" Background="#1D1B28" CornerRadius="6" Margin="0,8,0,0" Padding="10">
 									<TextBlock x:Name="DecTargetImageText" Foreground="White" TextWrapping="Wrap" VerticalAlignment="Top"/>
@@ -310,7 +310,7 @@
 						<Button Grid.Row="4" Classes="ActionBtn" Background="#4F5272" Click="DecodeBtn_Click">
 							<StackPanel Orientation="Horizontal" Spacing="10">
 								<PathIcon Data="{StaticResource LockOpenIcon}" Foreground="#A0A0B5" Width="18" Height="18" VerticalAlignment="Center"/>
-								<TextBlock Text="Расшифровать" VerticalAlignment="Center"/>
+								<TextBlock Text="Декодировать" VerticalAlignment="Center"/>
 							</StackPanel>
 						</Button>
 					</Grid>
@@ -325,7 +325,7 @@
 											<TextBlock Text="Текст" FontWeight="Bold" Foreground="White" FontSize="14" VerticalAlignment="Center"/>
 										</StackPanel>
 									</Border>
-									<TextBlock Text="Сохраните/просмотрите расшифрованный текст." Foreground="#9797A1" FontSize="11"/>
+									<TextBlock Text="Сохраните/просмотрите декодированный текст." Foreground="#9797A1" FontSize="11"/>
 								</StackPanel>
 
 								<Border Grid.Row="1" Background="#1D1B28" CornerRadius="6" Margin="0,8,0,0" Padding="5">
