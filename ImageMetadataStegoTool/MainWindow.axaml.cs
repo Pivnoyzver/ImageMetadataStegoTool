@@ -12,7 +12,8 @@ namespace ImageMetadataStegoTool
 {
     public partial class MainWindow : Window
     {
-        private Service service = new Service();
+        private readonly Service encService = new Service();
+        private readonly Service decService = new Service();
 
         public MainWindow()
         {
@@ -27,7 +28,7 @@ namespace ImageMetadataStegoTool
                 if (file != null)
                 {
                     string path = file.Path.LocalPath;
-                    service.AttachFile(path);
+                    encService.AttachFile(path);
                     EncInputTextBox.Text = $"Файл прикреплен:\n{path}";
                 }
             }
@@ -45,7 +46,7 @@ namespace ImageMetadataStegoTool
 
                     if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
                     {
-                        service.SetTargetImage(path);
+                        encService.SetTargetImage(path);
                         EncTargetImageText.Text = Path.GetFileName(path);
                         EncTargetImagePreview.Source = new Bitmap(path);
                     }
@@ -65,7 +66,7 @@ namespace ImageMetadataStegoTool
 
                     if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
                     {
-                        service.SetTargetImage(path);
+                        decService.SetTargetImage(path);
                         DecTargetImageText.Text = Path.GetFileName(path);
                         DecTargetImagePreview.Source = new Bitmap(path);
                     }
@@ -93,7 +94,7 @@ namespace ImageMetadataStegoTool
             if (files.Count > 0)
             {
                 string path = files[0].Path.LocalPath;
-                service.AttachFile(path);
+                encService.AttachFile(path);
                 EncInputTextBox.Text = $"Файл прикреплен:\n{path}";
             }
         }
@@ -113,7 +114,7 @@ namespace ImageMetadataStegoTool
             if (files.Count > 0)
             {
                 string path = files[0].Path.LocalPath;
-                service.SetTargetImage(path);
+                encService.SetTargetImage(path);
                 EncTargetImageText.Text = Path.GetFileName(path);
                 EncTargetImagePreview.Source = new Bitmap(path);
             }
@@ -123,22 +124,22 @@ namespace ImageMetadataStegoTool
         {
             try
             {
-                if (service.CurrentDataType == DataType.Text || string.IsNullOrEmpty(service.AttachedFilePath))
+                if (encService.CurrentDataType == DataType.Text || string.IsNullOrEmpty(encService.AttachedFilePath))
                 {
                     // Если пользователь вписал текст самостоятельно
                     if (!string.IsNullOrWhiteSpace(EncInputTextBox.Text) && !EncInputTextBox.Text.StartsWith("Файл прикреплен:"))
                     {
-                        service.AttachText(EncInputTextBox.Text);
+                        encService.AttachText(EncInputTextBox.Text);
                     }
-                    else if (string.IsNullOrEmpty(service.AttachedFilePath))
+                    else if (string.IsNullOrEmpty(encService.AttachedFilePath))
                     {
                         throw new Exception("Введите текст или выберите файл.");
                     }
                 }
 
-                service.Encrypt();
-                EncOutputNameText.Text = $"Успех!\nЗакодировано:\n{Path.GetFileName(service.LastEncodedImagePath)}";
-                EncOutputImagePreview.Source = new Bitmap(service.LastEncodedImagePath);
+                encService.Encrypt();
+                EncOutputNameText.Text = $"Успех!\nЗакодировано:\n{Path.GetFileName(encService.LastEncodedImagePath)}";
+                EncOutputImagePreview.Source = new Bitmap(encService.LastEncodedImagePath);
             }
             catch (Exception ex)
             {
@@ -152,8 +153,8 @@ namespace ImageMetadataStegoTool
             {
                 string? suggestPath = null;
 
-                if (!string.IsNullOrEmpty(service.LastEncodedImagePath))
-                    suggestPath = service.LastEncodedImagePath;
+                if (!string.IsNullOrEmpty(encService.LastEncodedImagePath))
+                    suggestPath = encService.LastEncodedImagePath;
 
                 else
                     throw new Exception("Нет результатов для сохранения.");
@@ -166,7 +167,7 @@ namespace ImageMetadataStegoTool
 
                 if (file != null)
                 {
-                    service.SaveAs(file.Path.LocalPath);
+                    encService.SaveAs(file.Path.LocalPath);
                     EncOutputNameText.Text += "\n(Успешно сохранено)";
                 }
             }
@@ -193,7 +194,7 @@ namespace ImageMetadataStegoTool
             if (files.Count > 0)
             {
                 string path = files[0].Path.LocalPath;
-                service.SetTargetImage(path);
+                decService.SetTargetImage(path);
                 DecTargetImageText.Text = Path.GetFileName(path);
                 DecTargetImagePreview.Source = new Bitmap(path);
             }
@@ -203,15 +204,15 @@ namespace ImageMetadataStegoTool
         {
             try
             {
-                service.Decrypt();
+                decService.Decrypt();
 
-                if (service.LastDecodedText != null)
+                if (decService.LastDecodedText != null)
                 {
-                    DecOutputTextBox.Text = service.LastDecodedText;
+                    DecOutputTextBox.Text = decService.LastDecodedText;
                 }
-                else if (service.LastDecodedFilePath != null)
+                else if (decService.LastDecodedFilePath != null)
                 {
-                    DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(service.LastDecodedFilePath)}";
+                    DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(decService.LastDecodedFilePath)}";
                 }
             }
             catch (Exception ex)
@@ -226,10 +227,10 @@ namespace ImageMetadataStegoTool
             {
                 string? suggestPath = null;
 
-                if (!string.IsNullOrEmpty(service.LastDecodedFilePath))
-                    suggestPath = service.LastDecodedFilePath;
+                if (!string.IsNullOrEmpty(decService.LastDecodedFilePath))
+                    suggestPath = decService.LastDecodedFilePath;
 
-                else if (!string.IsNullOrEmpty(service.LastDecodedText))
+                else if (!string.IsNullOrEmpty(decService.LastDecodedText))
                     suggestPath = "decoded_text.txt";
 
                 else
@@ -243,11 +244,11 @@ namespace ImageMetadataStegoTool
 
                 if (file != null)
                 {
-                    service.SaveAs(file.Path.LocalPath);
-                    if (service.LastDecodedText != null)
-                        DecOutputTextBox.Text = service.LastDecodedText + "\n\n(Успешно сохранено)";
-                    else if (service.LastDecodedFilePath != null)
-                        DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(service.LastDecodedFilePath)}\n\n(Успешно сохранено)";
+                    decService.SaveAs(file.Path.LocalPath);
+                    if (decService.LastDecodedText != null)
+                        DecOutputTextBox.Text = decService.LastDecodedText + "\n\n(Успешно сохранено)";
+                    else if (decService.LastDecodedFilePath != null)
+                        DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(decService.LastDecodedFilePath)}\n\n(Успешно сохранено)";
                 }
             }
             catch (Exception ex)
