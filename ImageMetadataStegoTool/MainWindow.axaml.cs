@@ -31,7 +31,7 @@ namespace ImageMetadataStegoTool
                 {
                     string path = file.Path.LocalPath;
                     encService.AttachFile(path);
-                    EncInputTextBox.Text = $"Файл прикреплен:\n{Path.GetFileName(path)}";
+                    EncInputTextBox.Text = encService.GetMagicFileAttachMessage();
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace ImageMetadataStegoTool
             {
                 string path = files[0].Path.LocalPath;
                 encService.AttachFile(path);
-                EncInputTextBox.Text = $"Файл прикреплен:\n{Path.GetFileName(path)}";
+                EncInputTextBox.Text = encService.GetMagicFileAttachMessage();
             }
         }
 
@@ -143,14 +143,20 @@ namespace ImageMetadataStegoTool
 
             try
             {
-                if (encService.CurrentDataType == DataType.Text || string.IsNullOrEmpty(encService.AttachedFilePath))
-                {
-                    // Если пользователь вписал текст самостоятельно
-                    if (!string.IsNullOrWhiteSpace(EncInputTextBox.Text) && !EncInputTextBox.Text.StartsWith("Файл прикреплен:"))
-                        encService.AttachText(EncInputTextBox.Text);
+                var inputText = EncInputTextBox.Text;
 
-                    else if (string.IsNullOrEmpty(encService.AttachedFilePath))
-                        throw new Exception("Введите текст или выберите файл.");
+                if (string.IsNullOrEmpty(inputText))
+                    throw new Exception("Введите текст или выберите файл.");
+
+                if (string.IsNullOrEmpty(encService.AttachedFilePath))
+                    encService.AttachText(inputText);
+
+                else
+                {
+                    var textFromAttachedFile = encService.GetMagicFileAttachMessage();
+
+                    if (inputText != textFromAttachedFile)
+                        encService.AttachText(inputText);
                 }
 
                 encService.Encrypt();

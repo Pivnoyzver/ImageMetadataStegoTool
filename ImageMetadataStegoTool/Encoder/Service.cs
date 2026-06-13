@@ -74,7 +74,7 @@ public class Service
                 throw new InvalidOperationException("Файл для шифрования не прикреплен.");
             input = AttachedFilePath;
         }
-        
+
         LastEncodedImagePath = Encoder.Encode(TargetImagePath, input, CurrentDataType);
     }
 
@@ -115,5 +115,12 @@ public class Service
 
         else
             throw new InvalidOperationException("Нет результатов для сохранения.");
+    }
+
+    public string? GetMagicFileAttachMessage()
+    {
+        return string.IsNullOrEmpty(AttachedFilePath)
+            ? null
+            : $"Файл прикреплен:\n{Path.GetFileName(AttachedFilePath)}";
     }
 }
