@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:md="clr-namespace:Markdown.Avalonia;assembly=Markdown.Avalonia"
         x:Class="ImageMetadataStegoTool.HelpWindow"
-        Title="Справка" MaxWidth="680" MaxHeight="500" MinWidth="350" MinHeight="300" 
+        Title="Справка" MaxWidth="600" MaxHeight="530" MinWidth="350" MinHeight="300" 
         WindowStartupLocation="CenterOwner"
         Background="#161520"
         Foreground="#CFD8DC">
