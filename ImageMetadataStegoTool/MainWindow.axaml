@@ -329,7 +329,13 @@
 								</StackPanel>
 
 								<Border Grid.Row="1" Background="#1D1B28" CornerRadius="6" Margin="0,8,0,0" Padding="5">
-									<TextBox x:Name="DecOutputTextBox" Background="Transparent" BorderThickness="0" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top"/>
+									<ScrollViewer VerticalScrollBarVisibility="Auto">
+										<SelectableTextBlock x:Name="DecOutputTextBox"
+															 Background="Transparent"
+															 TextWrapping="Wrap"
+															 VerticalAlignment="Top"
+															 Margin="4"/>
+									</ScrollViewer>
 								</Border>
 							</Grid>
 						</Border>

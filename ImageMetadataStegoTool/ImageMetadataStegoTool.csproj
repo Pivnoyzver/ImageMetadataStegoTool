@@ -7,12 +7,15 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
-	
-	<ItemGroup>
-		<AvaloniaResource Include="Assets\icon.png" />
-		<AvaloniaResource Include="Assets\icon.ico" />
-	</ItemGroup>
-	
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\icon.png" />
+    <AvaloniaResource Include="Assets\icon.ico" />
+	<AvaloniaResource Include="..\Instruction.md">
+		 <Link>Instruction.md</Link>
+	</AvaloniaResource>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.11" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.11" />

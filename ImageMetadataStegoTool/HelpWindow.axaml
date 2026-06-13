@@ -1,0 +1,16 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ImageMetadataStegoTool.HelpWindow"
+        Title="Справка" Width="500" Height="400"
+        WindowStartupLocation="CenterOwner"
+        Background="#201E2E">
+
+	<ScrollViewer Margin="6" VerticalScrollBarVisibility="Auto">
+		<SelectableTextBlock x:Name="HelpContentTextBox"
+                             Foreground="White"
+                             Background="Transparent"
+                             FontSize="14"
+                             TextWrapping="Wrap"
+                             Margin="4"/>
+	</ScrollViewer>
+</Window>
