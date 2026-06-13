@@ -15,6 +15,8 @@ namespace ImageMetadataStegoTool
         private readonly Service encService = new Service();
         private readonly Service decService = new Service();
 
+        private HelpWindow? _helpWindow;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -74,11 +76,19 @@ namespace ImageMetadataStegoTool
             }
         }
 
-        private async void HelpBtn_Click(object? sender, RoutedEventArgs e)
+        private void HelpBtn_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            var helpWindow = new HelpWindow();
+            if (_helpWindow == null || !_helpWindow.IsVisible)
+            {
+                _helpWindow = new HelpWindow();
 
-            await helpWindow.ShowDialog(this);
+                _helpWindow.Closed += (s, args) => _helpWindow = null;
+                _helpWindow.Show(this);
+            }
+            else
+            {
+                _helpWindow.Activate();
+            }
         }
 
         // --- ENCRYPTION -----------------------------------------
