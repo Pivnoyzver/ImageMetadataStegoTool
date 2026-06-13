@@ -19,9 +19,10 @@ public class Encoder
         var outputDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "OutputImages");
         if (!Directory.Exists(outputDirectory))
             Directory.CreateDirectory(outputDirectory);
-        var newFileName = $"{Path.GetFileNameWithoutExtension(target)}_{Guid.NewGuid():N}{Path.GetExtension(target)}";
 
-        var newFilePath = Path.Combine(outputDirectory, newFileName);
+        var fileNameWithoutExt = Path.GetFileNameWithoutExtension(target);
+        var ext = Path.GetExtension(target);
+        var newFilePath = GetUniqueFilePath(outputDirectory, fileNameWithoutExt, ext);
 
         File.WriteAllBytes(newFilePath, newImageBytes);
         return newFilePath;
@@ -49,8 +50,7 @@ public class Encoder
             if (!Directory.Exists(outputDirectory))
                 Directory.CreateDirectory(outputDirectory);
 
-            var newFileName = $"decoded_{Guid.NewGuid():N}{package.FileExtension}";
-            var newFilePath = Path.Combine(outputDirectory, newFileName);
+            var newFilePath = GetUniqueFilePath(outputDirectory, "decoded", package.FileExtension);
 
             File.WriteAllBytes(newFilePath, package.Data);
             return (newFilePath, DataType.File);
@@ -77,5 +77,21 @@ public class Encoder
             return new Package(File.ReadAllBytes(input), Path.GetExtension(input));
         else
             throw new NotSupportedException("Unsupported data type.");
+    }
+
+    private static string GetUniqueFilePath(string directory, string fileNameWithoutExtension, string extension)
+    {
+        var newFileName = $"{fileNameWithoutExtension}{extension}";
+        var newFilePath = Path.Combine(directory, newFileName);
+        int count = 1;
+
+        while (File.Exists(newFilePath))
+        {
+            newFileName = $"{fileNameWithoutExtension} ({count}){extension}";
+            newFilePath = Path.Combine(directory, newFileName);
+            count++;
+        }
+
+        return newFilePath;
     }
 }
