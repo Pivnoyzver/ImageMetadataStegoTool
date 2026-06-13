@@ -50,6 +50,8 @@ namespace ImageMetadataStegoTool
                     {
                         encService.SetTargetImage(path);
                         EncTargetImageText.Text = Path.GetFileName(path);
+
+                        (EncTargetImagePreview.Source as IDisposable)?.Dispose();
                         EncTargetImagePreview.Source = new Bitmap(path);
                     }
                 }
@@ -70,6 +72,8 @@ namespace ImageMetadataStegoTool
                     {
                         decService.SetTargetImage(path);
                         DecTargetImageText.Text = Path.GetFileName(path);
+
+                        (DecTargetImagePreview.Source as IDisposable)?.Dispose();
                         DecTargetImagePreview.Source = new Bitmap(path);
                     }
                 }
@@ -126,6 +130,8 @@ namespace ImageMetadataStegoTool
                 string path = files[0].Path.LocalPath;
                 encService.SetTargetImage(path);
                 EncTargetImageText.Text = Path.GetFileName(path);
+
+                (EncTargetImagePreview.Source as IDisposable)?.Dispose();
                 EncTargetImagePreview.Source = new Bitmap(path);
             }
         }
@@ -149,6 +155,8 @@ namespace ImageMetadataStegoTool
 
                 encService.Encrypt();
                 EncOutputNameText.Text = $"Успех!\nЗакодировано:\n{Path.GetFileName(encService.LastEncodedImagePath)}";
+
+                (EncOutputImagePreview.Source as IDisposable)?.Dispose();
                 EncOutputImagePreview.Source = new Bitmap(encService.LastEncodedImagePath);
             }
             catch (Exception ex)
@@ -206,6 +214,8 @@ namespace ImageMetadataStegoTool
                 string path = files[0].Path.LocalPath;
                 decService.SetTargetImage(path);
                 DecTargetImageText.Text = Path.GetFileName(path);
+
+                (DecTargetImagePreview.Source as IDisposable)?.Dispose();
                 DecTargetImagePreview.Source = new Bitmap(path);
             }
         }
