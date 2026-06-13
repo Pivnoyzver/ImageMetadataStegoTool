@@ -15,7 +15,7 @@ namespace ImageMetadataStegoTool
         private readonly Service encService = new Service();
         private readonly Service decService = new Service();
 
-        private HelpWindow? _helpWindow;
+        private HelpWindow? helpWindow;
 
         public MainWindow()
         {
@@ -78,16 +78,16 @@ namespace ImageMetadataStegoTool
 
         private void HelpBtn_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            if (_helpWindow == null || !_helpWindow.IsVisible)
+            if (helpWindow == null || !helpWindow.IsVisible)
             {
-                _helpWindow = new HelpWindow();
+                helpWindow = new HelpWindow();
 
-                _helpWindow.Closed += (s, args) => _helpWindow = null;
-                _helpWindow.Show(this);
+                helpWindow.Closed += (s, args) => helpWindow = null;
+                helpWindow.Show(this);
             }
             else
             {
-                _helpWindow.Activate();
+                helpWindow.Activate();
             }
         }
 
@@ -138,13 +138,10 @@ namespace ImageMetadataStegoTool
                 {
                     // Если пользователь вписал текст самостоятельно
                     if (!string.IsNullOrWhiteSpace(EncInputTextBox.Text) && !EncInputTextBox.Text.StartsWith("Файл прикреплен:"))
-                    {
                         encService.AttachText(EncInputTextBox.Text);
-                    }
+
                     else if (string.IsNullOrEmpty(encService.AttachedFilePath))
-                    {
                         throw new Exception("Введите текст или выберите файл.");
-                    }
                 }
 
                 encService.Encrypt();
@@ -154,6 +151,7 @@ namespace ImageMetadataStegoTool
             catch (Exception ex)
             {
                 EncOutputNameText.Text = $"Ошибка:\n{ex.Message}";
+                EncOutputImagePreview.Source = null;
             }
         }
 
@@ -217,13 +215,10 @@ namespace ImageMetadataStegoTool
                 decService.Decrypt();
 
                 if (decService.LastDecodedText != null)
-                {
                     DecOutputTextBox.Text = decService.LastDecodedText;
-                }
+
                 else if (decService.LastDecodedFilePath != null)
-                {
                     DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(decService.LastDecodedFilePath)}";
-                }
             }
             catch (Exception ex)
             {

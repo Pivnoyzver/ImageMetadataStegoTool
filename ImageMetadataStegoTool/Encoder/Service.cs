@@ -53,6 +53,10 @@ public class Service
     /// </summary>
     public void Encrypt()
     {
+        LastEncodedImagePath = null;
+        LastDecodedFilePath = null;
+        LastDecodedText = null;
+
         if (string.IsNullOrEmpty(TargetImagePath))
             throw new InvalidOperationException("Целевое изображение не выбрано.");
 
@@ -70,11 +74,8 @@ public class Service
                 throw new InvalidOperationException("Файл для шифрования не прикреплен.");
             input = AttachedFilePath;
         }
-
+        
         LastEncodedImagePath = Encoder.Encode(TargetImagePath, input, CurrentDataType);
-
-        LastDecodedFilePath = null;
-        LastDecodedText = null;
     }
 
     /// <summary>
@@ -82,23 +83,20 @@ public class Service
     /// </summary>
     public void Decrypt()
     {
+        LastEncodedImagePath = null;
+        LastDecodedFilePath = null;
+        LastDecodedText = null;
+
         if (string.IsNullOrEmpty(TargetImagePath))
             throw new InvalidOperationException("Не выбрано изображение для расшифровки.");
 
         var result = Encoder.Decode(TargetImagePath);
 
         if (result.Type == DataType.Text)
-        {
             LastDecodedText = result.Output;
-            LastDecodedFilePath = null;
-        }
-        else if (result.Type == DataType.File)
-        {
-            LastDecodedFilePath = result.Output;
-            LastDecodedText = null;
-        }
 
-        LastEncodedImagePath = null;
+        else if (result.Type == DataType.File)
+            LastDecodedFilePath = result.Output;
     }
 
     /// <summary>
@@ -107,20 +105,15 @@ public class Service
     public void SaveAs(string destinationPath)
     {
         if (!string.IsNullOrEmpty(LastEncodedImagePath))
-        {
             File.Copy(LastEncodedImagePath, destinationPath, overwrite: true);
-        }
+
         else if (!string.IsNullOrEmpty(LastDecodedFilePath))
-        {
             File.Copy(LastDecodedFilePath, destinationPath, overwrite: true);
-        }
+
         else if (!string.IsNullOrEmpty(LastDecodedText))
-        {
             File.WriteAllText(destinationPath, LastDecodedText);
-        }
+
         else
-        {
             throw new InvalidOperationException("Нет результатов для сохранения. Выполните шифрование или расшифровку.");
-        }
     }
 }
