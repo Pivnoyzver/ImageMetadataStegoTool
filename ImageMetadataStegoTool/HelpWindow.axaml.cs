@@ -15,7 +15,8 @@ namespace ImageMetadataStegoTool
 
         private void LoadInstructionContent()
         {
-            var target = this.FindControl<SelectableTextBlock>("HelpContentTextBox");
+            // Ищем наш новый элемент MarkdownScrollViewer
+            var target = this.FindControl<Markdown.Avalonia.MarkdownScrollViewer>("HelpContentMarkdown");
             if (target == null)
                 return;
 
@@ -26,11 +27,12 @@ namespace ImageMetadataStegoTool
                 using var stream = Avalonia.Platform.AssetLoader.Open(uri);
                 using var reader = new System.IO.StreamReader(stream);
 
-                target.Text = reader.ReadToEnd();
+                // Записываем прочитанный текст в свойство Markdown
+                target.Markdown = reader.ReadToEnd();
             }
             catch (Exception ex)
             {
-                target.Text = $"Ошибка при загрузке инструкции:\n{ex.Message}";
+                target.Markdown = $"**Ошибка при загрузке инструкции:**\n{ex.Message}";
             }
         }
     }
