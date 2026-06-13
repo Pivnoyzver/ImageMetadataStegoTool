@@ -132,6 +132,9 @@ namespace ImageMetadataStegoTool
 
         private void EncodeBtn_Click(object? sender, RoutedEventArgs e)
         {
+            EncOutputImagePreview.Source = null;
+            EncOutputNameText.Text = null;
+
             try
             {
                 if (encService.CurrentDataType == DataType.Text || string.IsNullOrEmpty(encService.AttachedFilePath))
@@ -151,7 +154,6 @@ namespace ImageMetadataStegoTool
             catch (Exception ex)
             {
                 EncOutputNameText.Text = $"Ошибка:\n{ex.Message}";
-                EncOutputImagePreview.Source = null;
             }
         }
 
@@ -210,6 +212,8 @@ namespace ImageMetadataStegoTool
 
         private void DecodeBtn_Click(object? sender, RoutedEventArgs e)
         {
+            DecOutputTextBox.Text = null;
+
             try
             {
                 decService.Decrypt();
