@@ -87,7 +87,7 @@ public class Encoder
 
         while (File.Exists(newFilePath))
         {
-            newFileName = $"{fileNameWithoutExtension} ({count}){extension}";
+            newFileName = $"{fileNameWithoutExtension}({count}){extension}";
             newFilePath = Path.Combine(directory, newFileName);
             count++;
         }

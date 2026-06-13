@@ -114,6 +114,6 @@ public class Service
             File.WriteAllText(destinationPath, LastDecodedText);
 
         else
-            throw new InvalidOperationException("Нет результатов для сохранения. Выполните шифрование или расшифровку.");
+            throw new InvalidOperationException("Нет результатов для сохранения.");
     }
 }

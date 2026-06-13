@@ -31,7 +31,7 @@ namespace ImageMetadataStegoTool
                 {
                     string path = file.Path.LocalPath;
                     encService.AttachFile(path);
-                    EncInputTextBox.Text = $"Файл прикреплен:\n{path}";
+                    EncInputTextBox.Text = $"Файл прикреплен:\n{Path.GetFileName(path)}";
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace ImageMetadataStegoTool
             {
                 string path = files[0].Path.LocalPath;
                 encService.AttachFile(path);
-                EncInputTextBox.Text = $"Файл прикреплен:\n{path}";
+                EncInputTextBox.Text = $"Файл прикреплен:\n{Path.GetFileName(path)}";
             }
         }
 
@@ -154,7 +154,7 @@ namespace ImageMetadataStegoTool
                 }
 
                 encService.Encrypt();
-                EncOutputNameText.Text = $"Успех!\nЗакодировано:\n{Path.GetFileName(encService.LastEncodedImagePath)}";
+                EncOutputNameText.Text = $"{Path.GetFileName(encService.LastEncodedImagePath)}";
 
                 (EncOutputImagePreview.Source as IDisposable)?.Dispose();
                 EncOutputImagePreview.Source = new Bitmap(encService.LastEncodedImagePath);
@@ -184,10 +184,7 @@ namespace ImageMetadataStegoTool
                 });
 
                 if (file != null)
-                {
                     encService.SaveAs(file.Path.LocalPath);
-                    EncOutputNameText.Text += "\n(Успешно сохранено)";
-                }
             }
             catch (Exception ex)
             {
@@ -262,13 +259,8 @@ namespace ImageMetadataStegoTool
                 });
 
                 if (file != null)
-                {
                     decService.SaveAs(file.Path.LocalPath);
-                    if (decService.LastDecodedText != null)
-                        DecOutputTextBox.Text = decService.LastDecodedText + "\n\n(Успешно сохранено)";
-                    else if (decService.LastDecodedFilePath != null)
-                        DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(decService.LastDecodedFilePath)}\n\n(Успешно сохранено)";
-                }
+
             }
             catch (Exception ex)
             {
