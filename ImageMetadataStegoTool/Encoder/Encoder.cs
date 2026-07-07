@@ -50,6 +50,9 @@ public class Encoder
             if (!Directory.Exists(outputDirectory))
                 Directory.CreateDirectory(outputDirectory);
 
+            if (string.IsNullOrEmpty(package.FileExtension))
+                throw new InvalidOperationException("File extension is missing in the package.");
+                
             var newFilePath = GetUniqueFilePath(outputDirectory, "decoded", package.FileExtension);
 
             File.WriteAllBytes(newFilePath, package.Data);
