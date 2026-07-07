@@ -5,14 +5,14 @@ namespace ImageMetadataStegoTool;
 
 public class Service
 {
-    public string TargetImagePath { get; private set; }
-    public string AttachedFilePath { get; private set; }
-    public string AttachedText { get; private set; }
+    public string? TargetImagePath { get; private set; }
+    public string? AttachedFilePath { get; private set; }
+    public string? AttachedText { get; private set; }
     public DataType CurrentDataType { get; private set; } = DataType.Text;
 
-    public string LastEncodedImagePath { get; private set; }
-    public string LastDecodedFilePath { get; private set; }
-    public string LastDecodedText { get; private set; }
+    public string? LastEncodedImagePath { get; private set; }
+    public string? LastDecodedFilePath { get; private set; }
+    public string? LastDecodedText { get; private set; }
 
     /// <summary>
     /// Выбор целевого изображения (в которое прячем или из которого читаем)
