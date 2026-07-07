@@ -9,10 +9,10 @@ public class Package
     private static readonly byte[] Magic = Encoding.ASCII.GetBytes("stEG");
     public int Length => Data.Length;
     public DataType DataType { get; private set; }
-    public string FileExtension { get; private set; }
+    public string? FileExtension { get; private set; }
     public byte[] Data { get; private set; }
 
-    private Package(DataType dataType, byte[] data, string fileExtension = null)
+    private Package(DataType dataType, byte[] data, string? fileExtension = null)
     {
         DataType = dataType;
         Data = (byte[])data.Clone();
@@ -67,7 +67,7 @@ public class Package
         var dataType = (DataType)BitConverter.ToInt32(span.Slice(startIndex + 8, 4));
         var fileExtensionLength = BitConverter.ToInt32(span.Slice(startIndex + 12, 4));
 
-        string fileExtension = null;
+        string? fileExtension = null;
         if (fileExtensionLength > 0)
             fileExtension = Encoding.UTF8.GetString(span.Slice(startIndex + 16, fileExtensionLength));
 
