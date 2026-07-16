@@ -162,8 +162,11 @@ namespace ImageMetadataStegoTool
                 encService.Encrypt();
                 EncOutputNameText.Text = $"{Path.GetFileName(encService.LastEncodedImagePath)}";
 
-                (EncOutputImagePreview.Source as IDisposable)?.Dispose();
-                EncOutputImagePreview.Source = new Bitmap(encService.LastEncodedImagePath);
+                if (!string.IsNullOrEmpty(encService.LastEncodedImagePath))
+                {
+                    (EncOutputImagePreview.Source as IDisposable)?.Dispose();
+                    EncOutputImagePreview.Source = new Bitmap(encService.LastEncodedImagePath);
+                }
             }
             catch (Exception ex)
             {
