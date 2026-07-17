@@ -8,273 +8,272 @@ using System.IO;
 using Avalonia.Input;
 using System.Linq;
 
-namespace ImageMetadataStegoTool
+namespace ImageMetadataStegoTool;
+
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    private readonly Service encService = new Service();
+    private readonly Service decService = new Service();
+
+    private HelpWindow? helpWindow;
+
+    public MainWindow()
     {
-        private readonly Service encService = new Service();
-        private readonly Service decService = new Service();
+        InitializeComponent();
+    }
 
-        private HelpWindow? helpWindow;
-
-        public MainWindow()
+    private void EncInput_Drop(object? sender, DragEventArgs e)
+    {
+        if (e.Data.Contains(DataFormats.Files))
         {
-            InitializeComponent();
-        }
-
-        private void EncInput_Drop(object? sender, DragEventArgs e)
-        {
-            if (e.Data.Contains(DataFormats.Files))
+            var file = e.Data.GetFiles()?.FirstOrDefault();
+            if (file != null)
             {
-                var file = e.Data.GetFiles()?.FirstOrDefault();
-                if (file != null)
-                {
-                    string path = file.Path.LocalPath;
-                    encService.AttachFile(path);
-                    EncInputTextBox.Text = encService.GetMagicFileAttachMessage();
-                }
-            }
-        }
-
-        private void EncImage_Drop(object? sender, DragEventArgs e)
-        {
-            if (e.Data.Contains(DataFormats.Files))
-            {
-                var file = e.Data.GetFiles()?.FirstOrDefault();
-                if (file != null)
-                {
-                    string path = file.Path.LocalPath;
-                    string ext = Path.GetExtension(path).ToLower();
-
-                    if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
-                    {
-                        encService.SetTargetImage(path);
-                        EncTargetImageText.Text = Path.GetFileName(path);
-
-                        (EncTargetImagePreview.Source as IDisposable)?.Dispose();
-                        EncTargetImagePreview.Source = new Bitmap(path);
-                    }
-                }
-            }
-        }
-
-        private void DecImage_Drop(object? sender, DragEventArgs e)
-        {
-            if (e.Data.Contains(DataFormats.Files))
-            {
-                var file = e.Data.GetFiles()?.FirstOrDefault();
-                if (file != null)
-                {
-                    string path = file.Path.LocalPath;
-                    string ext = Path.GetExtension(path).ToLower();
-
-                    if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
-                    {
-                        decService.SetTargetImage(path);
-                        DecTargetImageText.Text = Path.GetFileName(path);
-
-                        (DecTargetImagePreview.Source as IDisposable)?.Dispose();
-                        DecTargetImagePreview.Source = new Bitmap(path);
-                    }
-                }
-            }
-        }
-
-        private void HelpBtn_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            if (helpWindow == null || !helpWindow.IsVisible)
-            {
-                helpWindow = new HelpWindow();
-
-                helpWindow.Closed += (s, args) => helpWindow = null;
-                helpWindow.Show(this);
-            }
-            else
-            {
-                helpWindow.Activate();
-            }
-        }
-
-        // --- ENCRYPTION -----------------------------------------
-
-        private async void EncAttachFileBtn_Click(object? sender, RoutedEventArgs e)
-        {
-            var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-            {
-                Title = "Выберите файл для скрытия",
-                AllowMultiple = false
-            });
-
-            if (files.Count > 0)
-            {
-                string path = files[0].Path.LocalPath;
+                string path = file.Path.LocalPath;
                 encService.AttachFile(path);
                 EncInputTextBox.Text = encService.GetMagicFileAttachMessage();
             }
         }
+    }
 
-        private async void EncAttachImageBtn_Click(object? sender, RoutedEventArgs e)
+    private void EncImage_Drop(object? sender, DragEventArgs e)
+    {
+        if (e.Data.Contains(DataFormats.Files))
         {
-            var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            var file = e.Data.GetFiles()?.FirstOrDefault();
+            if (file != null)
             {
-                Title = "Выберите картинку",
-                AllowMultiple = false,
-                FileTypeFilter = new[]
+                string path = file.Path.LocalPath;
+                string ext = Path.GetExtension(path).ToLower();
+
+                if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
                 {
-                    new FilePickerFileType("Images") { Patterns = new[] { "*.png", "*.jpg", "*.jpeg" } }
+                    encService.SetTargetImage(path);
+                    EncTargetImageText.Text = Path.GetFileName(path);
+
+                    (EncTargetImagePreview.Source as IDisposable)?.Dispose();
+                    EncTargetImagePreview.Source = new Bitmap(path);
                 }
-            });
-
-            if (files.Count > 0)
-            {
-                string path = files[0].Path.LocalPath;
-                encService.SetTargetImage(path);
-                EncTargetImageText.Text = Path.GetFileName(path);
-
-                (EncTargetImagePreview.Source as IDisposable)?.Dispose();
-                EncTargetImagePreview.Source = new Bitmap(path);
             }
         }
+    }
 
-        private void EncodeBtn_Click(object? sender, RoutedEventArgs e)
+    private void DecImage_Drop(object? sender, DragEventArgs e)
+    {
+        if (e.Data.Contains(DataFormats.Files))
         {
-            EncOutputImagePreview.Source = null;
-            EncOutputNameText.Text = null;
-
-            try
+            var file = e.Data.GetFiles()?.FirstOrDefault();
+            if (file != null)
             {
-                var inputText = EncInputTextBox.Text;
+                string path = file.Path.LocalPath;
+                string ext = Path.GetExtension(path).ToLower();
 
-                if (string.IsNullOrEmpty(inputText))
-                    throw new Exception("Введите текст или выберите файл.");
+                if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
+                {
+                    decService.SetTargetImage(path);
+                    DecTargetImageText.Text = Path.GetFileName(path);
 
-                if (string.IsNullOrEmpty(encService.AttachedFilePath))
+                    (DecTargetImagePreview.Source as IDisposable)?.Dispose();
+                    DecTargetImagePreview.Source = new Bitmap(path);
+                }
+            }
+        }
+    }
+
+    private void HelpBtn_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (helpWindow == null || !helpWindow.IsVisible)
+        {
+            helpWindow = new HelpWindow();
+
+            helpWindow.Closed += (s, args) => helpWindow = null;
+            helpWindow.Show(this);
+        }
+        else
+        {
+            helpWindow.Activate();
+        }
+    }
+
+    // --- ENCRYPTION -----------------------------------------
+
+    private async void EncAttachFileBtn_Click(object? sender, RoutedEventArgs e)
+    {
+        var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Выберите файл для скрытия",
+            AllowMultiple = false
+        });
+
+        if (files.Count > 0)
+        {
+            string path = files[0].Path.LocalPath;
+            encService.AttachFile(path);
+            EncInputTextBox.Text = encService.GetMagicFileAttachMessage();
+        }
+    }
+
+    private async void EncAttachImageBtn_Click(object? sender, RoutedEventArgs e)
+    {
+        var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Выберите картинку",
+            AllowMultiple = false,
+            FileTypeFilter = new[]
+            {
+                new FilePickerFileType("Images") { Patterns = new[] { "*.png", "*.jpg", "*.jpeg" } }
+            }
+        });
+
+        if (files.Count > 0)
+        {
+            string path = files[0].Path.LocalPath;
+            encService.SetTargetImage(path);
+            EncTargetImageText.Text = Path.GetFileName(path);
+
+            (EncTargetImagePreview.Source as IDisposable)?.Dispose();
+            EncTargetImagePreview.Source = new Bitmap(path);
+        }
+    }
+
+    private void EncodeBtn_Click(object? sender, RoutedEventArgs e)
+    {
+        EncOutputImagePreview.Source = null;
+        EncOutputNameText.Text = null;
+
+        try
+        {
+            var inputText = EncInputTextBox.Text;
+
+            if (string.IsNullOrEmpty(inputText))
+                throw new Exception("Введите текст или выберите файл.");
+
+            if (string.IsNullOrEmpty(encService.AttachedFilePath))
+                encService.AttachText(inputText);
+
+            else
+            {
+                var textFromAttachedFile = encService.GetMagicFileAttachMessage();
+
+                if (inputText != textFromAttachedFile)
                     encService.AttachText(inputText);
-
-                else
-                {
-                    var textFromAttachedFile = encService.GetMagicFileAttachMessage();
-
-                    if (inputText != textFromAttachedFile)
-                        encService.AttachText(inputText);
-                }
-
-                encService.Encrypt();
-                EncOutputNameText.Text = $"{Path.GetFileName(encService.LastEncodedImagePath)}";
-
-                if (!string.IsNullOrEmpty(encService.LastEncodedImagePath))
-                {
-                    (EncOutputImagePreview.Source as IDisposable)?.Dispose();
-                    EncOutputImagePreview.Source = new Bitmap(encService.LastEncodedImagePath);
-                }
             }
-            catch (Exception ex)
+
+            encService.Encrypt();
+            EncOutputNameText.Text = $"{Path.GetFileName(encService.LastEncodedImagePath)}";
+
+            if (!string.IsNullOrEmpty(encService.LastEncodedImagePath))
             {
-                EncOutputNameText.Text = $"Ошибка:\n{ex.Message}";
+                (EncOutputImagePreview.Source as IDisposable)?.Dispose();
+                EncOutputImagePreview.Source = new Bitmap(encService.LastEncodedImagePath);
             }
         }
-
-        private async void EncSaveBtn_Click(object? sender, RoutedEventArgs e)
+        catch (Exception ex)
         {
-            try
-            {
-                string? suggestPath = null;
-
-                if (!string.IsNullOrEmpty(encService.LastEncodedImagePath))
-                    suggestPath = encService.LastEncodedImagePath;
-
-                else
-                    throw new Exception("Нет результатов для сохранения.");
-
-                var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-                {
-                    Title = "Сохранить закодированное изображение как...",
-                    SuggestedFileName = Path.GetFileName(suggestPath)
-                });
-
-                if (file != null)
-                    encService.SaveAs(file.Path.LocalPath);
-            }
-            catch (Exception ex)
-            {
-                EncOutputNameText.Text = $"Ошибка сохранения:\n{ex.Message}";
-            }
+            EncOutputNameText.Text = $"Ошибка:\n{ex.Message}";
         }
+    }
 
-        // --- DECRYPTION -----------------------------------------
-
-        private async void DecAttachImageBtn_Click(object? sender, RoutedEventArgs e)
+    private async void EncSaveBtn_Click(object? sender, RoutedEventArgs e)
+    {
+        try
         {
-            var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            string? suggestPath = null;
+
+            if (!string.IsNullOrEmpty(encService.LastEncodedImagePath))
+                suggestPath = encService.LastEncodedImagePath;
+
+            else
+                throw new Exception("Нет результатов для сохранения.");
+
+            var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
             {
-                Title = "Выберите закодированную картинку",
-                AllowMultiple = false,
-                FileTypeFilter = new[]
-                {
-                    new FilePickerFileType("Images") { Patterns = new[] { "*.png", "*.jpg", "*.jpeg"} }
-                }
+                Title = "Сохранить закодированное изображение как...",
+                SuggestedFileName = Path.GetFileName(suggestPath)
             });
 
-            if (files.Count > 0)
-            {
-                string path = files[0].Path.LocalPath;
-                decService.SetTargetImage(path);
-                DecTargetImageText.Text = Path.GetFileName(path);
-
-                (DecTargetImagePreview.Source as IDisposable)?.Dispose();
-                DecTargetImagePreview.Source = new Bitmap(path);
-            }
+            if (file != null)
+                encService.SaveAs(file.Path.LocalPath);
         }
-
-        private void DecodeBtn_Click(object? sender, RoutedEventArgs e)
+        catch (Exception ex)
         {
-            DecOutputTextBox.Text = null;
-
-            try
-            {
-                decService.Decrypt();
-
-                if (decService.LastDecodedText != null)
-                    DecOutputTextBox.Text = decService.LastDecodedText;
-
-                else if (decService.LastDecodedFilePath != null)
-                    DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(decService.LastDecodedFilePath)}";
-            }
-            catch (Exception ex)
-            {
-                DecOutputTextBox.Text = $"Ошибка:\n{ex.Message}";
-            }
+            EncOutputNameText.Text = $"Ошибка сохранения:\n{ex.Message}";
         }
+    }
 
-        private async void DecSaveBtn_Click(object? sender, RoutedEventArgs e)
+    // --- DECRYPTION -----------------------------------------
+
+    private async void DecAttachImageBtn_Click(object? sender, RoutedEventArgs e)
+    {
+        var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            try
+            Title = "Выберите закодированную картинку",
+            AllowMultiple = false,
+            FileTypeFilter = new[]
             {
-                string? suggestPath = null;
-
-                if (!string.IsNullOrEmpty(decService.LastDecodedFilePath))
-                    suggestPath = decService.LastDecodedFilePath;
-
-                else if (!string.IsNullOrEmpty(decService.LastDecodedText))
-                    suggestPath = "decoded_text.txt";
-
-                else
-                    throw new Exception("Нет результатов для сохранения.");
-
-                var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-                {
-                    Title = "Сохранить расшифрованное как...",
-                    SuggestedFileName = Path.GetFileName(suggestPath)
-                });
-
-                if (file != null)
-                    decService.SaveAs(file.Path.LocalPath);
-
+                new FilePickerFileType("Images") { Patterns = new[] { "*.png", "*.jpg", "*.jpeg"} }
             }
-            catch (Exception ex)
+        });
+
+        if (files.Count > 0)
+        {
+            string path = files[0].Path.LocalPath;
+            decService.SetTargetImage(path);
+            DecTargetImageText.Text = Path.GetFileName(path);
+
+            (DecTargetImagePreview.Source as IDisposable)?.Dispose();
+            DecTargetImagePreview.Source = new Bitmap(path);
+        }
+    }
+
+    private void DecodeBtn_Click(object? sender, RoutedEventArgs e)
+    {
+        DecOutputTextBox.Text = null;
+
+        try
+        {
+            decService.Decrypt();
+
+            if (decService.LastDecodedText != null)
+                DecOutputTextBox.Text = decService.LastDecodedText;
+
+            else if (decService.LastDecodedFilePath != null)
+                DecOutputTextBox.Text = $"Извлечен файл:\n{Path.GetFileName(decService.LastDecodedFilePath)}";
+        }
+        catch (Exception ex)
+        {
+            DecOutputTextBox.Text = $"Ошибка:\n{ex.Message}";
+        }
+    }
+
+    private async void DecSaveBtn_Click(object? sender, RoutedEventArgs e)
+    {
+        try
+        {
+            string? suggestPath = null;
+
+            if (!string.IsNullOrEmpty(decService.LastDecodedFilePath))
+                suggestPath = decService.LastDecodedFilePath;
+
+            else if (!string.IsNullOrEmpty(decService.LastDecodedText))
+                suggestPath = "decoded_text.txt";
+
+            else
+                throw new Exception("Нет результатов для сохранения.");
+
+            var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
             {
-                DecOutputTextBox.Text = $"Ошибка сохранения:\n{ex.Message}";
-            }
+                Title = "Сохранить расшифрованное как...",
+                SuggestedFileName = Path.GetFileName(suggestPath)
+            });
+
+            if (file != null)
+                decService.SaveAs(file.Path.LocalPath);
+
+        }
+        catch (Exception ex)
+        {
+            DecOutputTextBox.Text = $"Ошибка сохранения:\n{ex.Message}";
         }
     }
 }
