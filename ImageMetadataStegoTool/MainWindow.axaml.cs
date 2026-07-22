@@ -170,7 +170,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            EncOutputNameText.Text = $"Ошибка:\n{ex.Message}";
+            EncOutputNameText.Text = $"{ex.Message}";
         }
     }
 
@@ -197,7 +197,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            EncOutputNameText.Text = $"Ошибка сохранения:\n{ex.Message}";
+            EncOutputNameText.Text = $"{ex.Message}";
         }
     }
 
@@ -242,7 +242,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            DecOutputTextBox.Text = $"Ошибка:\n{ex.Message}";
+            DecOutputTextBox.Text = $"{ex.Message}";
         }
     }
 
@@ -273,7 +273,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            DecOutputTextBox.Text = $"Ошибка сохранения:\n{ex.Message}";
+            DecOutputTextBox.Text = $"{ex.Message}";
         }
     }
 }
