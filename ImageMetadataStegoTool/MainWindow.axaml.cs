@@ -80,7 +80,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void HelpBtn_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void HelpBtn_Click(object? sender, RoutedEventArgs e)
     {
         if (helpWindow == null || !helpWindow.IsVisible)
         {
