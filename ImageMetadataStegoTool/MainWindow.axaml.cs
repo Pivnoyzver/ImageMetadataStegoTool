@@ -12,8 +12,8 @@ namespace ImageMetadataStegoTool;
 
 public partial class MainWindow : Window
 {
-    private readonly Service encService = new Service();
-    private readonly Service decService = new Service();
+    private readonly Service encService = new();
+    private readonly Service decService = new();
 
     private HelpWindow? helpWindow;
 
