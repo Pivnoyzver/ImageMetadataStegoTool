@@ -66,23 +66,10 @@ public class Service
         if (string.IsNullOrEmpty(TargetImagePath))
             throw new InvalidOperationException("Целевое изображение не выбрано.");
 
-
-        //TODO заменить на тернарный оператор  
-
-        string input;
-
-        if (CurrentDataType == DataType.Text)
-        {
-            if (string.IsNullOrEmpty(AttachedText))
-                throw new InvalidOperationException("Текст для шифрования пуст.");
-            input = AttachedText;
-        }
-        else
-        {
-            if (string.IsNullOrEmpty(AttachedFilePath))
-                throw new InvalidOperationException("Файл для шифрования не прикреплен.");
-            input = AttachedFilePath;
-        }
+        var input = CurrentDataType == DataType.Text ? AttachedText : AttachedFilePath;
+        
+        if (string.IsNullOrEmpty(input))
+            throw new InvalidOperationException("Ввод шифруемых данных пуст.");
 
         LastEncodedImagePath = Encoder.Encode(TargetImagePath, input, CurrentDataType);
     }
