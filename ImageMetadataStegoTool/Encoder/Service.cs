@@ -25,6 +25,12 @@ public class Service
         TargetImagePath = path;
     }
 
+
+    //TODO выделить ветку под туду
+    //TODO добавить метод для очистки прикрепленного файла и текста (ResetAttachments)
+    //TODO добавить метод для очистки последних результатов (ResetResults)
+    //TODO объеденить AttachFile и AttachText в один метод (аругмент или перегрузка)
+
     /// <summary>
     /// Скрепка: прикрепление файла для сокрытия
     /// </summary>
@@ -59,6 +65,9 @@ public class Service
 
         if (string.IsNullOrEmpty(TargetImagePath))
             throw new InvalidOperationException("Целевое изображение не выбрано.");
+
+
+        //TODO заменить на тернарный оператор  
 
         string input;
 
