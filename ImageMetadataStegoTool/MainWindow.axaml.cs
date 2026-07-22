@@ -119,10 +119,10 @@ public partial class MainWindow : Window
         {
             Title = "Выберите картинку",
             AllowMultiple = false,
-            FileTypeFilter = new[]
-            {
-                new FilePickerFileType("Images") { Patterns = new[] { "*.png", "*.jpg", "*.jpeg" } }
-            }
+            FileTypeFilter =
+            [
+                new FilePickerFileType("Images") { Patterns = ["*.png", "*.jpg", "*.jpeg"] }
+            ]
         });
 
         if (files.Count > 0)
@@ -209,10 +209,10 @@ public partial class MainWindow : Window
         {
             Title = "Выберите закодированную картинку",
             AllowMultiple = false,
-            FileTypeFilter = new[]
-            {
-                new FilePickerFileType("Images") { Patterns = new[] { "*.png", "*.jpg", "*.jpeg"} }
-            }
+            FileTypeFilter =
+            [
+                new FilePickerFileType("Images") { Patterns = ["*.png", "*.jpg", "*.jpeg"] }
+            ]
         });
 
         if (files.Count > 0)
