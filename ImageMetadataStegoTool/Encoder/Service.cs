@@ -26,7 +26,6 @@ public class Service
     }
 
 
-    //TODO выделить ветку под туду
     //TODO добавить метод для очистки прикрепленного файла и текста (ResetAttachments)
     //TODO добавить метод для очистки последних результатов (ResetResults)
     //TODO объеденить AttachFile и AttachText в один метод (аругмент или перегрузка)
