@@ -25,7 +25,6 @@ public class Service
         TargetImagePath = path;
     }
 
-    //TODO добавить метод для очистки прикрепленного файла и текста (ResetAttachments)
     //TODO перенести логику приклепления фото и проверки в сервис
 
     /// <summary>
@@ -33,26 +32,25 @@ public class Service
     /// </summary>
     public void AttachInput(string input, DataType dataType)
     {
+        AttachedFilePath = null;
+        AttachedText = null;
+        
         switch (dataType)
         {
             case DataType.Text:
-            
                 AttachedText = input;
-                AttachedFilePath = null;
-                CurrentDataType = DataType.Text;
                 break;
                 
             case DataType.File:
-
                 if (!File.Exists(input)) throw new FileNotFoundException("Прикрепляемый файл не найден.", input);
                 AttachedFilePath = input;
-                AttachedText = null;
-                CurrentDataType = DataType.File;
                 break;
                 
             default:
                 throw new ArgumentException("Неверный тип данных для прикрепления.", nameof(dataType));
         }
+
+        CurrentDataType = dataType;
     }
 
     /// <summary>
