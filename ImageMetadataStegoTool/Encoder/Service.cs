@@ -25,8 +25,6 @@ public class Service
         TargetImagePath = path;
     }
 
-    //TODO перенести логику приклепления фото и проверки в сервис
-
     /// <summary>
     /// Ввод данных (текст или файл) для сокрытия
     /// </summary>
