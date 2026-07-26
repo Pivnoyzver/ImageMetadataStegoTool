@@ -26,7 +26,7 @@ public class Service
     }
 
     //TODO добавить метод для очистки прикрепленного файла и текста (ResetAttachments)
-    //TODO добавить метод для очистки последних результатов (ResetResults)
+    //TODO перенести логику приклепления фото и проверки в сервис
 
     /// <summary>
     /// Ввод данных (текст или файл) для сокрытия
@@ -60,9 +60,7 @@ public class Service
     /// </summary>
     public void Encrypt()
     {
-        LastEncodedImagePath = null;
-        LastDecodedFilePath = null;
-        LastDecodedText = null;
+        ResetResults();
 
         if (string.IsNullOrEmpty(TargetImagePath))
             throw new InvalidOperationException("Целевое изображение не выбрано.");
@@ -80,9 +78,7 @@ public class Service
     /// </summary>
     public void Decrypt()
     {
-        LastEncodedImagePath = null;
-        LastDecodedFilePath = null;
-        LastDecodedText = null;
+        ResetResults();
 
         if (string.IsNullOrEmpty(TargetImagePath))
             throw new InvalidOperationException("Не выбрано изображение для расшифровки.");
@@ -119,5 +115,12 @@ public class Service
         return string.IsNullOrEmpty(AttachedFilePath)
             ? null
             : $"Файл прикреплен:\n{Path.GetFileName(AttachedFilePath)}";
+    }
+
+    private void ResetResults()
+    {
+        LastEncodedImagePath = null;
+        LastDecodedFilePath = null;
+        LastDecodedText = null;
     }
 }
