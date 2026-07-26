@@ -25,33 +25,8 @@ public class Service
         TargetImagePath = path;
     }
 
-
     //TODO добавить метод для очистки прикрепленного файла и текста (ResetAttachments)
     //TODO добавить метод для очистки последних результатов (ResetResults)
-    //TODO объеденить AttachFile и AttachText в один метод (аругмент или перегрузка)
-
-    /// <summary>
-    /// Скрепка: прикрепление файла для сокрытия
-    /// </summary>
-    public void AttachFile(string path)
-    {
-        if (!File.Exists(path))
-            throw new FileNotFoundException("Прикрепляемый файл не найден.", path);
-
-        AttachedFilePath = path;
-        AttachedText = null;
-        CurrentDataType = DataType.File;
-    }
-
-    /// <summary>
-    /// Ввод текста для сокрытия
-    /// </summary>
-    public void AttachText(string text)
-    {
-        AttachedText = text;
-        AttachedFilePath = null;
-        CurrentDataType = DataType.Text;
-    }
 
     /// <summary>
     /// Ввод данных (текст или файл) для сокрытия
