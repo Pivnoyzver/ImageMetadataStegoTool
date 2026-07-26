@@ -106,6 +106,9 @@ public class Service
             throw new InvalidOperationException("Нет результатов для сохранения.");
     }
 
+    /// <summary>
+    /// Возврат строки о прикреплении файла (для отображения в UI и проверки редактирования текста)
+    /// </summary>
     public string? GetMagicFileAttachMessage()
     {
         return string.IsNullOrEmpty(AttachedFilePath)
@@ -113,6 +116,9 @@ public class Service
             : $"Файл прикреплен:\n{Path.GetFileName(AttachedFilePath)}";
     }
 
+    /// <summary>
+    /// Очистка последних результатов кодирования/декодирования
+    /// </summary>
     private void ResetResults()
     {
         LastEncodedImagePath = null;
