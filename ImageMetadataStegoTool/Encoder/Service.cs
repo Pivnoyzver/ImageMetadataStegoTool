@@ -54,6 +54,33 @@ public class Service
     }
 
     /// <summary>
+    /// Ввод данных (текст или файл) для сокрытия
+    /// </summary>
+    public void AttachInput(string input, DataType dataType)
+    {
+        switch (dataType)
+        {
+            case DataType.Text:
+            
+                AttachedText = input;
+                AttachedFilePath = null;
+                CurrentDataType = DataType.Text;
+                break;
+                
+            case DataType.File:
+
+                if (!File.Exists(input)) throw new FileNotFoundException("Прикрепляемый файл не найден.", input);
+                AttachedFilePath = input;
+                AttachedText = null;
+                CurrentDataType = DataType.File;
+                break;
+                
+            default:
+                throw new ArgumentException("Неверный тип данных для прикрепления.", nameof(dataType));
+        }
+    }
+
+    /// <summary>
     /// Зашифровать (спрятать данные (текст или файл) в целевом изображении)
     /// </summary>
     public void Encrypt()
