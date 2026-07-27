@@ -22,6 +22,9 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
+    /// <summary>
+    /// Прикрепление файла для сокрытия (Drag&Drop)
+    /// </summary>
     private void EncInput_Drop(object? sender, DragEventArgs e)
     {
         if (e.Data.Contains(DataFormats.Files))
@@ -36,6 +39,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Прикрепление целевого изображения для зашифровки (Drag&Drop)
+    /// </summary>
     private void EncImage_Drop(object? sender, DragEventArgs e)
     {
         if (e.Data.Contains(DataFormats.Files))
@@ -58,6 +64,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Прикрепление целевого изображения для расшифровки (Drag&Drop)
+    /// </summary>
     private void DecImage_Drop(object? sender, DragEventArgs e)
     {
         if (e.Data.Contains(DataFormats.Files))
@@ -80,6 +89,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Открытие окна справки
+    /// </summary>
     private void HelpBtn_Click(object? sender, RoutedEventArgs e)
     {
         if (helpWindow == null || !helpWindow.IsVisible)
@@ -95,8 +107,9 @@ public partial class MainWindow : Window
         }
     }
 
-    // --- ENCRYPTION -----------------------------------------
-
+    /// <summary>
+    /// Прикрепление файла для сокрытия (кнопка)
+    /// </summary>
     private async void EncAttachFileBtn_Click(object? sender, RoutedEventArgs e)
     {
         var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -113,6 +126,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Прикрепление целевого изображения для зашифровки (кнопка)
+    /// </summary>
     private async void EncAttachImageBtn_Click(object? sender, RoutedEventArgs e)
     {
         var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -136,6 +152,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Шифрование (кнопка)
+    /// </summary>
     private void EncodeBtn_Click(object? sender, RoutedEventArgs e)
     {
         EncOutputImagePreview.Source = null;
@@ -174,6 +193,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Сохранения зашифрованного изображения (кнопка)
+    /// </summary>
     private async void EncSaveBtn_Click(object? sender, RoutedEventArgs e)
     {
         try
@@ -201,8 +223,9 @@ public partial class MainWindow : Window
         }
     }
 
-    // --- DECRYPTION -----------------------------------------
-
+    /// <summary>
+    /// Прикрепление целевого изображения для расшифровки (кнопка)
+    /// </summary>
     private async void DecAttachImageBtn_Click(object? sender, RoutedEventArgs e)
     {
         var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -226,6 +249,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Расшифровка (кнопка)
+    /// </summary>
     private void DecodeBtn_Click(object? sender, RoutedEventArgs e)
     {
         DecOutputTextBox.Text = null;
@@ -246,6 +272,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Сохранения расшифрованного контента (кнопка)
+    /// </summary>
     private async void DecSaveBtn_Click(object? sender, RoutedEventArgs e)
     {
         try
