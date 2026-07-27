@@ -26,26 +26,29 @@ public class Service
     }
 
     /// <summary>
-    /// Скрепка: прикрепление файла для сокрытия
+    /// Ввод данных (текст или файл) для сокрытия
     /// </summary>
-    public void AttachFile(string path)
+    public void AttachInput(string input, DataType dataType)
     {
-        if (!File.Exists(path))
-            throw new FileNotFoundException("Прикрепляемый файл не найден.", path);
-
-        AttachedFilePath = path;
-        AttachedText = null;
-        CurrentDataType = DataType.File;
-    }
-
-    /// <summary>
-    /// Ввод текста для сокрытия
-    /// </summary>
-    public void AttachText(string text)
-    {
-        AttachedText = text;
         AttachedFilePath = null;
-        CurrentDataType = DataType.Text;
+        AttachedText = null;
+        
+        switch (dataType)
+        {
+            case DataType.Text:
+                AttachedText = input;
+                break;
+                
+            case DataType.File:
+                if (!File.Exists(input)) throw new FileNotFoundException("Прикрепляемый файл не найден.", input);
+                AttachedFilePath = input;
+                break;
+                
+            default:
+                throw new ArgumentException("Неверный тип данных для прикрепления.", nameof(dataType));
+        }
+
+        CurrentDataType = dataType;
     }
 
     /// <summary>
@@ -53,27 +56,15 @@ public class Service
     /// </summary>
     public void Encrypt()
     {
-        LastEncodedImagePath = null;
-        LastDecodedFilePath = null;
-        LastDecodedText = null;
+        ResetResults();
 
         if (string.IsNullOrEmpty(TargetImagePath))
             throw new InvalidOperationException("Целевое изображение не выбрано.");
 
-        string input;
-
-        if (CurrentDataType == DataType.Text)
-        {
-            if (string.IsNullOrEmpty(AttachedText))
-                throw new InvalidOperationException("Текст для шифрования пуст.");
-            input = AttachedText;
-        }
-        else
-        {
-            if (string.IsNullOrEmpty(AttachedFilePath))
-                throw new InvalidOperationException("Файл для шифрования не прикреплен.");
-            input = AttachedFilePath;
-        }
+        var input = CurrentDataType == DataType.Text ? AttachedText : AttachedFilePath;
+        
+        if (string.IsNullOrEmpty(input))
+            throw new InvalidOperationException("Ввод шифруемых данных пуст.");
 
         LastEncodedImagePath = Encoder.Encode(TargetImagePath, input, CurrentDataType);
     }
@@ -83,9 +74,7 @@ public class Service
     /// </summary>
     public void Decrypt()
     {
-        LastEncodedImagePath = null;
-        LastDecodedFilePath = null;
-        LastDecodedText = null;
+        ResetResults();
 
         if (string.IsNullOrEmpty(TargetImagePath))
             throw new InvalidOperationException("Не выбрано изображение для расшифровки.");
@@ -117,10 +106,23 @@ public class Service
             throw new InvalidOperationException("Нет результатов для сохранения.");
     }
 
+    /// <summary>
+    /// Возврат строки о прикреплении файла (для отображения в UI и проверки редактирования текста)
+    /// </summary>
     public string? GetMagicFileAttachMessage()
     {
         return string.IsNullOrEmpty(AttachedFilePath)
             ? null
             : $"Файл прикреплен:\n{Path.GetFileName(AttachedFilePath)}";
+    }
+
+    /// <summary>
+    /// Очистка последних результатов кодирования/декодирования
+    /// </summary>
+    private void ResetResults()
+    {
+        LastEncodedImagePath = null;
+        LastDecodedFilePath = null;
+        LastDecodedText = null;
     }
 }

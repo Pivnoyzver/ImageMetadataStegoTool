@@ -33,7 +33,7 @@ public partial class MainWindow : Window
             if (file != null)
             {
                 string path = file.Path.LocalPath;
-                encService.AttachFile(path);
+                encService.AttachInput(path, DataType.File);
                 EncInputTextBox.Text = encService.GetMagicFileAttachMessage();
             }
         }
@@ -121,7 +121,7 @@ public partial class MainWindow : Window
         if (files.Count > 0)
         {
             string path = files[0].Path.LocalPath;
-            encService.AttachFile(path);
+            encService.AttachInput(path, DataType.File);
             EncInputTextBox.Text = encService.GetMagicFileAttachMessage();
         }
     }
@@ -168,14 +168,14 @@ public partial class MainWindow : Window
                 throw new Exception("Введите текст или выберите файл.");
 
             if (string.IsNullOrEmpty(encService.AttachedFilePath))
-                encService.AttachText(inputText);
+                encService.AttachInput(inputText, DataType.Text);
 
             else
             {
                 var textFromAttachedFile = encService.GetMagicFileAttachMessage();
 
                 if (inputText != textFromAttachedFile)
-                    encService.AttachText(inputText);
+                    encService.AttachInput(inputText, DataType.Text);
             }
 
             encService.Encrypt();
